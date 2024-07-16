@@ -1,0 +1,90 @@
+.chatList {
+    flex: 1;
+    overflow: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(17, 25, 40, 0.5) transparent;
+
+    &::-webkit-scrollbar {
+        width:.5rem;
+        background-color: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: rgba(17, 25, 40, 0.5);
+        border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+
+    .search {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        padding: .2rem;
+
+        .searchBar {
+            flex: 1;
+            background-color: rgba(17, 25, 40, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 1.8rem;
+            border-radius: 19rem;
+            padding: .2rem;
+
+            input {
+                background-color: transparent;
+                border: none;
+                outline: none;
+                color: white;
+                flex: 1;
+                font-size: 1rem;
+            }
+
+            img {
+                width: 1.1rem;
+                height: 1.1rem;
+            }
+        }
+
+        .add {
+            width: 2.5rem;
+            height: 2.5rem;
+            background: rgba(17, 25, 40, 0.5);
+            padding: 1rem;
+            border-radius: .1rem;
+        }
+    }
+
+    .item {
+        display: flex;
+        align-items: center;
+        gap: 1.4rem;
+        padding: 1rem;
+        cursor: pointer;
+        border-bottom: .1rem solid #dddddd35;
+
+        img {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .text {
+            display: flex;
+            flex-direction: column;
+            gap: .6rem;
+
+            span {
+                font-weight: 300;
+            }
+
+            p {
+                font-size: 1.1rem;
+                font-weight: 100;
+            }
+        }
+    }
+}

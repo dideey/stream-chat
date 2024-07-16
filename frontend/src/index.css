@@ -12,7 +12,7 @@ body {
   align-items:center;
   justify-content: center;
   height: 100vh;
-  color: #fafafa;
+  color: white;
   
 }
 
@@ -20,8 +20,8 @@ body {
   width: 90vw;
   height: 90vh;
   background: rgba(17, 25, 40, 0.75) ;
-  backdrop-filter: blur(.3rem) saturate(200%);
-  border-radius: 1.3rem;
+  backdrop-filter: blur(1.9rem) saturate(200%);
+  border-radius: 1.2rem;
   border: .1rem solid rgba(225, 225, 225, 0.125);
   display: flex;
 }
