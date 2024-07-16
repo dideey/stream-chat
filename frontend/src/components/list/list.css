@@ -1,5 +1,9 @@
 .list {
     flex:1;
+<<<<<<< HEAD
     display: flex;
     flex-direction: column;
 }
+=======
+}
+>>>>>>> b0c9db33af04d95b12c746fcd78cbc8101c37331
