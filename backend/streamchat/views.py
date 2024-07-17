@@ -6,37 +6,52 @@ from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
 
 
-from rest_framework.views import APIView
+from django.contrib.auth.models import Group, User
+from rest_framework import permissions, viewsets
+from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework import status
 from django.contrib.auth import authenticate, login, logout
-from .serializers import UserSerializer, LoginSerializer
+from .serializers import UserSerializer, GroupSerializer, UserRegistrationSerializer
 
-class SignupView(APIView):
-    def post(self, request):
-        serializer = UserSerializer(data=request.data)
+class UserViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = User.objects.all().order_by('-date_joined')
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    @action(detail=False, methods=['post'], permission_classes=[permissions.AllowAny])
+    def signup(self, request):
+        serializer = UserRegistrationSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response({'status': 'success'}, status=status.HTTP_201_CREATED)
-        return Response({'status': 'error', 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'status': 'success'})
+        return Response({'status': 'error', 'errors': serializer.errors})
 
-class LoginView(APIView):
-    def post(self, request):
-        serializer = LoginSerializer(data=request.data)
-        if serializer.is_valid():
-            username = serializer.validated_data['username']
-            password = serializer.validated_data['password']
-            user = authenticate(username=username, password=password)
-            if user:
-                login(request, user)
-                return Response({'status': f'Hello, {username} Welcome back!'}, status=status.HTTP_200_OK)
-            return Response({'status': 'error', 'message': 'Invalid username or password'}, status=status.HTTP_400_BAD_REQUEST)
-        return Response({'status': 'error', 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+    @action(detail=False, methods=['post'], permission_classes=[permissions.AllowAny])
+    def login(self, request):
+        username = request.data.get('username')
+        password = request.data.get('password')
+        user = authenticate(username=username, password=password)
+        if user:
+            login(request, user)
+            return Response({'status': f'Hello, {username}! Welcome back!'})
+        return Response({'status': 'error', 'message': 'Invalid username or password'})
 
-class LogoutView(APIView):
-    def post(self, request):
+    @action(detail=False, methods=['post'], permission_classes=[permissions.IsAuthenticated])
+    def logout(self, request):
         logout(request)
-        return Response({'status': 'BYEEE!!!'}, status=status.HTTP_200_OK)
+        return Response({'status': 'BYEEE!!!'})
+
+class GroupViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows groups to be viewed or edited.
+    """
+    queryset = Group.objects.all().order_by('name')
+    serializer_class = GroupSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
 
 
 @csrf_exempt
