@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import stories from './stories.css';
+import styled from 'styled-components';
 import { FaPlusCircle } from 'react-icons/fa';
 
 const Stories = ({ stories, onAddStory }) => {
