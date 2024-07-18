@@ -1,6 +1,11 @@
+<<<<<<< HEAD
 import React, { useState } from 'react';
 import './stories.css'; // Assuming this is your CSS file
 import styled from 'styled-components'; // Import styled from styled-components
+=======
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+>>>>>>> 1f6f084dc8cf9b6a30370d0de4a4890bd82dc124
 import { FaPlusCircle } from 'react-icons/fa';
 
 const StoriesContainer = styled.div`
