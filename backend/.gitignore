@@ -11,3 +11,4 @@ test_profile.py
 tests/
 forms.py
 ../cookies.txt
+../frontend/node_modules
