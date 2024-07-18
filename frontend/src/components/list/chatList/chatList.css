@@ -5,13 +5,13 @@
     scrollbar-color: rgba(17, 25, 40, 0.5) transparent;
 
     &::-webkit-scrollbar {
-        width:.5rem;
+        width:.1rem;
         background-color: transparent;
     }
 
     &::-webkit-scrollbar-thumb {
         background-color: rgba(17, 25, 40, 0.5);
-        border-radius: 4px;
+        border-radius: .2rem;
     }
 
     &::-webkit-scrollbar-track {

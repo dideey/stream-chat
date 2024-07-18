@@ -1,19 +1,19 @@
-import { useState } from "react"
-import "./chatList.css"
+import React, { useState } from "react";
+import AddUser from "./addUser/AddUser"; 
+import "./chatList.css";
 
 const ChatList =() => {
     const [addMode,setAddMode] = useState(false)
-// jdhdhdhdhdh
     const chatItems = [
-        {img: './avatar.png', name: 'Yetunde Adams', msg: 'Hello'},
-        {img: './avatar.png', name: 'Timile Ben', msg: 'Hello'},
+        {img: './avatar4.png', name: 'Yetunde Adams', msg: 'Hello'},
+        {img: './avatar 3.png', name: 'Timile Ben', msg: 'Hello'},
         {img: './avatar.png', name: 'Imole K.', msg: 'Chimobi!'},
         {img: './avatar.png', name: 'Esther.', msg: 'how are you!'},
         {img: './avatar.png', name: 'jimi.', msg: 'how are you!'},
         {img: './avatar.png', name: 'lusee.', msg: 'how are you!'},
         {img: './avatar.png', name: 'ife.', msg: 'how are you!'},
         {img: './avatar.png', name: 'mark.', msg: 'how are you!'},
-        {img: './avatar.png', name: 'veekey.', msg: 'how are you!'},
+        {img: './avatar1.png', name: 'veekey.', msg: 'how are you!'},
     ];
     return (
         <div className="chatList">
@@ -92,6 +92,8 @@ const ChatList =() => {
                 </div>
 
             </div> */}
+
+            {addMode && <AddUser />}
         </div>
     )
 }

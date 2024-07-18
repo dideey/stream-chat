@@ -1,6 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import stories from './stories.css';
+import React, { useState } from 'react';
+import './stories.css'; // Assuming this is your CSS file
+import styled from 'styled-components'; // Import styled from styled-components
 import { FaPlusCircle } from 'react-icons/fa';
+
+const StoriesContainer = styled.div`
+  display: flex;
+  overflow-x: scroll;
+`;
+
+const AddStory = styled.div`
+  /* Styles for AddStory component */
+`;
+
+const Story = styled.div`
+  /* Styles for Story component */
+`;
+
+const StoryModal = styled.div`
+  /* Styles for StoryModal component */
+`;
+
+const StoryContent = styled.div`
+  /* Styles for StoryContent component */
+`;
 
 const Stories = ({ stories, onAddStory }) => {
   const [selectedStory, setSelectedStory] = useState(null);
@@ -28,7 +50,7 @@ const Stories = ({ stories, onAddStory }) => {
           />
         ))}
       </StoriesContainer>
-      <StoryModal isOpen={!!selectedStory} onClick={handleCloseModal}>
+      <StoryModal style={{ display: selectedStory ? 'block' : 'none' }} onClick={handleCloseModal}>
         <StoryContent>
           {selectedStory && (
             <img

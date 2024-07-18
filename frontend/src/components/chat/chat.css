@@ -24,6 +24,8 @@
                 height: 4rem;
                 border-radius: 50%;
                 object-fit: cover;
+                cursor: pointer;
+
             }
 
             .texts{
@@ -48,6 +50,7 @@
         .icons{
             display: flex;
             gap:.8rem;
+            cursor: pointer;
 
             img{
                 width: 1rem;
@@ -59,17 +62,17 @@
     .center {
         padding: 2rem;
         flex: 1;
-        overflow: auto;
+        overflow:scroll;
         display: flex;
         flex-direction: column;
-
         -ms-overflow-style: none;
-        scrollbar-width: .5rem;
+        scrollbar-width: .1rem;
     }
 
 
     .center::-webkit-scrollbar {
-        width: .3rem;
+        width: .1rem;
+        background-color: transparent;
         display: none;
     }
     
@@ -83,7 +86,7 @@
     
             .texrs {
                 p {
-                    background-color: rgb(2, 2, 24);
+                    background: rgba(17, 25, 40, 0.8);
                 }
             }
         }
@@ -135,13 +138,13 @@
         }
         input{
             flex: 1;
-            border-color: rgba(17, 25, 40, 0.5);
+            background-color: rgba(127, 201, 219, 0.788);
             border:none;
             outline: none;
-            color: white;
+            color: rgb(0, 0, 0);
             padding: .9rem;
-            border-radius:1rem;
-            font-size: .5rem;
+            border-radius:4rem;
+            font-size: .9rem;
         }
 
         .sendButton{

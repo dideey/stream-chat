@@ -1,0 +1,66 @@
+.addUser {
+    width: max-content;
+    height: max-content;
+    padding: 2rem;
+    background-color: rgba(17, 25, 40, 0.801);
+    border-radius: 1rem;
+    position: absolute;
+    top:0;
+    right:0;
+    left: 0;
+    bottom: 0;
+    margin: auto;
+
+
+    form{
+        display: flex;
+        gap:1rem;
+
+        input{
+            padding:1rem;
+            border-radius: 1rem;
+            border:none;
+            outline: none;
+        }
+
+        button{
+            padding: 1rem;
+            border: none;
+            border-radius: 1rem;
+            cursor: pointer;
+            background: #3a249c8a;
+            color: white;
+        }
+    }
+
+    .user {
+        margin-top: 5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+
+        .detail {
+            display: flex;
+            align-items: center;
+            gap:2rem;
+            img {
+                width: 5rem;
+                height: 5rem;
+                border-radius: 5rem;
+                border: none;
+                object-fit: cover;
+            }
+        }
+
+        button{
+            padding: .1rem;
+            border: none;
+            border-radius: 1rem;
+            cursor: pointer;
+            background: #3a249c8a;
+            color: white;
+        }
+    }
+
+}
