@@ -9,7 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
         #extra_kwargs = {'password': {'write_only': True}}
 
 class ProfileSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
+    #user = UserSerializer(read_only=True)
 
     class Meta:
         model = Profile
