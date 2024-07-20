@@ -5,7 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
 
-
+from rest_framework import status
 from django.contrib.auth.models import Group, User
 from rest_framework import permissions, viewsets
 from rest_framework.decorators import action
@@ -87,27 +87,40 @@ class ProfileViewSet(viewsets.ModelViewSet):
     serializer_class = ProfileSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    def retrieve(self, request, pk=None):
+    @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
+    def retrieve_profile(self, request):
         """
-        Get a user profile.
-        - URL: GET /api/profile/{user_id}/
+        Get a user profile by username.
+        - URL: GET /profile/retrieve_profile/?username={username}
         - Permissions: Authenticated users only.
-        - Request: None.
+        - Request: username (as query parameter)
         - Response: User profile data.
         """
-        profile = self.get_object()
+        username = request.query_params.get('username')
+        if not username:
+            return Response({'error': 'Username is required'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            user = User.objects.get(username=username)
+            profile = user.profile
+        except User.DoesNotExist:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Profile.DoesNotExist:
+            return Response({'error': 'Profile not found'}, status=status.HTTP_404_NOT_FOUND)
+
         serializer = self.get_serializer(profile)
         return Response(serializer.data)
 
-    def update(self, request, pk=None):
+    @action(detail=False, methods=['put'], permission_classes=[permissions.IsAuthenticated])
+    def update_profile(self, request):
         """
         Update a user profile.
-        - URL: PUT /api/profile/{user_id}/
+        - URL: PUT /profile/update_profile/
         - Permissions: Authenticated users only.
-        - Request: bio, profile_pic, etc.
+        - Request: bio, profile_pic.
         - Response: Updated profile data.
         """
-        profile = self.get_object()
+        profile = request.user.profile
         serializer = self.get_serializer(profile, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
@@ -118,7 +131,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
     def my_profile(self, request):
         """
         Get the profile of the logged-in user.
-        - URL: GET /api/profile/my_profile/
+        - URL: GET /profile/my_profile/
         - Permissions: Authenticated users only.
         - Request: None.
         - Response: Logged-in user profile data.
