@@ -28,7 +28,7 @@ class ChatGroup(models.Model):
         return self.group_name
 
 class GroupMessage(models.Model):
-    group=models.ForeignKey(chatGroup, on_delete=models.CASCADE)
+    group=models.ForeignKey(ChatGroup, on_delete=models.CASCADE)
     author=models.ForeignKey(User, on_delete=models.CASCADE)
     body=models.TextField(max_length=1000)
     created_at=models.DateTimeField(auto_now_add=True)
@@ -40,7 +40,7 @@ class GroupMessage(models.Model):
         ordering=('created_at',)
 
 class GroupMember(models.Model):
-    group=models.ForeignKey(chatGroup, on_delete=models.CASCADE)
+    group=models.ForeignKey(ChatGroup, on_delete=models.CASCADE)
     user=models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
