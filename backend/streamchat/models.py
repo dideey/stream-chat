@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-class profile(models.Model):
+class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(max_length=1000, blank=True)
     profile_pic = models.ImageField(upload_to='profile_pics', blank=True)
@@ -10,7 +10,7 @@ class profile(models.Model):
         return self.user.username
 
 
-class chat(models.Model):
+class Chat(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     message = models.TextField(max_length=1000)
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -21,7 +21,7 @@ class chat(models.Model):
     class meta:
         ordering=('timestamp',)
 
-class chatGroup(models.Model):
+class ChatGroup(models.Model):
     group_name=models.CharField(max_length=100)
 
     def __str__(self):
