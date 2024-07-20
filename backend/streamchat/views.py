@@ -23,6 +23,13 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['post'], permission_classes=[permissions.AllowAny])
     def signup(self, request):
+        """
+        Register a new user.
+        - URL: POST    /users/signup/
+        - Permissions: Public (no authentication required).
+        - Request: username, password, email, etc.
+        - Response: Success or error status.
+        """
         serializer = UserRegistrationSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -31,6 +38,13 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['post'], permission_classes=[permissions.AllowAny])
     def login(self, request):
+        """
+        Log in a user.
+        - URL: POST    /users/login/
+        - Permissions: Public (no authentication required).
+        - Request: username, password.
+        - Response: Welcome message or error.
+        """
         username = request.data.get('username')
         password = request.data.get('password')
         user = authenticate(username=username, password=password)
@@ -41,8 +55,28 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['post'], permission_classes=[permissions.IsAuthenticated])
     def logout(self, request):
+        """
+        Log out the current user.
+        - URL: POST    /api/users/logout/
+        - Permissions: Authenticated users only.
+        - Request: None.
+        - Response: Logout message.
+        """
         logout(request)
         return Response({'status': 'BYEEE!!!'})
+
+    @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
+    def me(self, request):
+        """
+        Get the details of the current user.
+        - URL: GET    /users/me/
+        - Permissions: Authenticated users only.
+        - Request: None.
+        - Response: User details.
+        """
+        user = request.user
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
 
 class GroupViewSet(viewsets.ModelViewSet):
     """
