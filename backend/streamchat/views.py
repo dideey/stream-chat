@@ -11,7 +11,8 @@ from rest_framework import permissions, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.contrib.auth import authenticate, login, logout
-from .serializers import UserSerializer, GroupSerializer, UserRegistrationSerializer
+from .serializers import UserSerializer, GroupSerializer, UserRegistrationSerializer, ProfileSerializer
+from .models import Profile, Chat, ChatGroup, GroupMessage, GroupMember
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -77,6 +78,55 @@ class UserViewSet(viewsets.ModelViewSet):
         user = request.user
         serializer = UserSerializer(user)
         return Response(serializer.data)
+    
+class ProfileViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint for managing user profiles.
+    """
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def retrieve(self, request, pk=None):
+        """
+        Get a user profile.
+        - URL: GET /api/profile/{user_id}/
+        - Permissions: Authenticated users only.
+        - Request: None.
+        - Response: User profile data.
+        """
+        profile = self.get_object()
+        serializer = self.get_serializer(profile)
+        return Response(serializer.data)
+
+    def update(self, request, pk=None):
+        """
+        Update a user profile.
+        - URL: PUT /api/profile/{user_id}/
+        - Permissions: Authenticated users only.
+        - Request: bio, profile_pic, etc.
+        - Response: Updated profile data.
+        """
+        profile = self.get_object()
+        serializer = self.get_serializer(profile, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
+    def my_profile(self, request):
+        """
+        Get the profile of the logged-in user.
+        - URL: GET /api/profile/my_profile/
+        - Permissions: Authenticated users only.
+        - Request: None.
+        - Response: Logged-in user profile data.
+        """
+        profile = request.user.profile
+        serializer = self.get_serializer(profile)
+        return Response(serializer.data)
+
 
 class GroupViewSet(viewsets.ModelViewSet):
     """
