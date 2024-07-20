@@ -1,74 +1,70 @@
 .chat {
-    flex:2;
+    flex: 2;
     border-left: .1rem solid #dddddd35;
-    border-right:.1rem solid #dddddd35;
+    border-right: .1rem solid #dddddd35;
     height: 100%;
     display: flex;
     flex-direction: column;
 
-    .top{
+    .top {
         padding: .2rem;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        border-bottom:.1rem solid #dddddd35;
+        border-bottom: .1rem solid #dddddd35;
 
-
-        .user{
+        .user {
             display: flex;
             align-items: center;
             gap: .6rem;
 
-            img{
+            img {
                 width: 4rem;
                 height: 4rem;
                 border-radius: 50%;
                 object-fit: cover;
                 cursor: pointer;
-
             }
 
-            .texts{
+            .texts {
                 display: flex;
                 flex-direction: column;
-                gap:.1rem;
+                gap: .1rem;
 
-
-                span{
-                    font-size:1rem;
+                span {
+                    font-size: 1rem;
                     font-weight: bold;
                 }
 
-                p{
-                    font-size:.9rem;
+                p {
+                    font-size: .9rem;
                     font-weight: 100;
-                    color:#fafafa;
+                    color: #FFFFFF;
                 }  
             }
         }
 
-        .icons{
+        .icons {
             display: flex;
-            gap:.8rem;
+            gap: .8rem;
             cursor: pointer;
 
-            img{
+            img {
                 width: 1rem;
                 height: 1rem;
             }
         }
-        
     }
+
     .center {
         padding: 2rem;
         flex: 1;
-        overflow:scroll;
+        overflow: scroll;
         display: flex;
         flex-direction: column;
         -ms-overflow-style: none;
         scrollbar-width: .1rem;
     }
-
 
     .center::-webkit-scrollbar {
         width: .1rem;
@@ -84,9 +80,9 @@
         &.own {
             align-self: self-end;
     
-            .texrs {
+            .texts {
                 p {
-                    background: rgba(17, 25, 40, 0.8);
+                    background: rgba(255, 255, 255, 0.1);
                 }
             }
         }
@@ -106,7 +102,7 @@
     
             p {
                 padding: 1rem;
-                background: rgba(17, 25, 40, 0.1);
+                background: rgba(0, 102, 204, 1);
                 border-radius: 1rem;
             }
     
@@ -117,39 +113,40 @@
         }
     }
     
-    .bottom{
+    .bottom {
         padding: .7rem;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        border-top:.1rem solid #dddddd35;
+        border-top: .1rem solid #dddddd35;
         gap: 1.3rem;
         margin-top: auto;
 
-        .icons{
+        .icons {
             display: flex;
             gap: .6rem;
         }
 
-        img{
-            width:1rem;
+        img {
+            width: 1rem;
             height: 1rem;
             cursor: pointer;
         }
-        input{
+
+        input {
             flex: 1;
-            background-color: rgba(127, 201, 219, 0.788);
-            border:none;
+            background-color: rgba(0, 102, 204, 1);
+            border: none;
             outline: none;
             color: rgb(0, 0, 0);
             padding: .9rem;
-            border-radius:4rem;
+            border-radius: 4rem;
             font-size: .9rem;
         }
 
-        .sendButton{
+        .sendButton {
             background-color: #07aed8;
-            color:white;
+            color: white;
             padding: .2rem .4rem;
             border: none;
             border-radius: .5rem;
