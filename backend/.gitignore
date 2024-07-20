@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+db.sqlite3
+daphne.log
+media/
+cookies.txt
+conftest.py
+pytest.ini
+migrations/
+test_profile.py
+tests/
+forms.py
+../cookies.txt
