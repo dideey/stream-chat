@@ -1,44 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
+import ChatList from "./components/list/chatList/ChatList"; // Make sure this path is correct
 import Chat from "./components/chat/Chat";
-import List from "./components/list/List";
-import Detail from "./components/detail/Detail"; // Corrected import for Detail
-// import Stories from "./components/stories/Stories";
-// import SettingsPage from "./components/settings/SettingsPage"; // Import statement fixed for SettingsPage
-import Login from "./components/login/Login"
+import Detail from "./components/detail/Detail";
+import Login from "./components/login/Login";
 import Notification from "./components/notification/Notification";
-import "./App.css"; // Assuming you have a CSS file for global styles or additional styling
+import "./App.css";
 
 const App = () => {
-
   const user = true;
-  // Sample data for Stories (commented out since Stories component is not used)
-  // const sampleStories = [
-  //   { id: 1, isNew: true, image: 'image1.jpg' },
-  //   { id: 2, isNew: false, image: 'image2.jpg' },
-  //   // Add more sample stories as needed
-  // ];
-
-  // const handleAddStory = () => {
-  //   // Logic for adding a new story
-  // };
+  const [selectedChat, setSelectedChat] = useState(null);
 
   return (
     <div className="container">
-      {
-        user ? (
-          <>
-            <List />
-            <Chat />
-            <Detail />
-          </>
-        ) : (
-          <Login /> // Assuming you have a Login component
-        )
-      }
+      {user ? (
+        <>
+          <ChatList onSelectChat={setSelectedChat} />
+          <Chat selectedChat={selectedChat} />
+          <Detail selectedChat={selectedChat} />
+        </>
+      ) : (
+        <Login />
+      )}
       <Notification />
-      {/* Commented out Stories and SettingsPage components */}
-      {/* <SettingsPage /> */}
-      {/* <Stories stories={sampleStories} onAddStory={handleAddStory} /> */}
     </div>
   );
 };

@@ -19,8 +19,8 @@ body {
 .container {
   width: 100vw;
   height: 100vh;
-  background: rgba(17, 25, 40, 0.75) ;
-  backdrop-filter: blur(1.9rem) saturate(200%);
+  background: rgba (128, 128, 128, 20);
+  backdrop-filter: blur(1.9rem) saturate(100%);
   border-radius: 1.2rem;
   border: .1rem solid rgba(225, 225, 225, 0.125);
   display: flex;

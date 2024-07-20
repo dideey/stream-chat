@@ -2,7 +2,7 @@
     flex: 1;
     overflow: scroll;
     scrollbar-width: thin;
-    scrollbar-color: rgba(17, 25, 40, 0.5) transparent;
+    scrollbar-color: rgba(150, 155, 165, 0.5) transparent;
 
     &::-webkit-scrollbar {
         width:.1rem;
@@ -10,7 +10,7 @@
     }
 
     &::-webkit-scrollbar-thumb {
-        background-color: rgba(17, 25, 40, 0.5);
+        background-color: rgba(125, 130, 139, 0.5) transparent;
         border-radius: .2rem;
     }
 
@@ -26,7 +26,7 @@
 
         .searchBar {
             flex: 1;
-            background-color: rgba(17, 25, 40, 0.5);
+            background-color: rgba(51, 140, 224, 0.815);
             display: flex;
             align-items: center;
             gap: 1.8rem;
@@ -51,7 +51,7 @@
         .add {
             width: 2.5rem;
             height: 2.5rem;
-            background: rgba(17, 25, 40, 0.5);
+            background: rgba(89, 153, 206, 0.712);
             padding: 1rem;
             border-radius: .1rem;
         }

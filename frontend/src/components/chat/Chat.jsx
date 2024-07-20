@@ -1,121 +1,86 @@
-import React, { useEffect,  useRef, useState } from "react";
-import "./chat.css"
-import EmojiPicker from "emoji-picker-react"
-const Chat =() => {
-    const [open,setOpen] =useState(false)
-    const [text, setText] = useState("");
+import React, { useEffect, useRef, useState } from "react";
+import "./chat.css";
 
-    const endRef = useRef(null)
+const Chat = () => {
+    // const [open, setOpen] = useState(false); // Commented out to remove warning
+    const [text, setText] = useState("");
+    const [messages, setMessages] = useState([]);
+
+    const endRef = useRef(null);
 
     useEffect(() => {
         endRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, []);
-    const handleEmoji =e => {
+    }, [messages]);
 
-        setText((prev) => prev + e.emoji);
-        setOpen(false)
+    // const handleEmoji = (e) => { // Commented out to remove warning
+    //     setText((prev) => prev + e.emoji);
+    //     setOpen(false);
+    // };
+
+    const handleSend = () => {
+        if (text.trim() !== "") {
+            setMessages((prevMessages) => [
+                ...prevMessages,
+                { text, own: true, timestamp: new Date() }
+            ]);
+            setText("");
+        }
     };
 
-    console.log(text)
     return (
         <div className="chat">
             <div className="top">
                 <div className="user">
-                    <img src="./avatar.png" alt="" />
+                    <img src="./avatar6.png" alt="Profile picture of Esther" />
                     <div className="texts">
-                        <span>Tim Jay</span>
+                        <span>Esther</span>
                         <p>Lorem ipsum dolor sit amet.</p>
                     </div>
                 </div>
                 <div className="icons">
-                    <img src="./phone.png" alt="" />
-                    <img src="./video.png" alt="" />
-                    <img src="./info.png" alt="" />
+                    <img src="./phone.png" alt="Phone icon" />
+                    <img src="./video.png" alt="Video call icon" />
+                    <img src="./info.png" alt="Information icon" />
                 </div>
             </div>
             <div className="center">
-                <div className="message">
-                    <img src="./avatar.png" alt="" />
-                    <div className="texrs">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Et 
-                        incidunt quibusdam tenetur dignissimos! Deleniti suscipit numquam nihil tempora eos
-                        doloremque maiores iusto, voluptatem officia? Eius quia
-                        ullam commodi mollitia corrupti.</p>
-                        <span>1 min ago</span>
+                {messages.map((msg, index) => (
+                    <div className={`message ${msg.own ? "own" : ""}`} key={index}>
+                        {msg.own ? null : <img src="./avatar6.png" alt="" />}
+                        <div className="texts">
+                            <p>{msg.text}</p>
+                            <span>{msg.timestamp.toLocaleTimeString()}</span>
+                        </div>
                     </div>
-                </div>
-                <div className="message 0wn">
-                    <div className="texrs">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Et 
-                        incidunt quibusdam tenetur dignissimos! Deleniti suscipit numquam nihil tempora eos
-                        doloremque maiores iusto, voluptatem officia? Eius quia
-                        ullam commodi mollitia corrupti.</p>
-                        <span>1 min ago</span>
-                    </div>
-                </div>
-                <div className="message">
-                    <img src="./avatar.png" alt="" />
-                    <div className="texrs">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Et 
-                        incidunt quibusdam tenetur dignissimos! Deleniti suscipit numquam nihil tempora eos
-                        doloremque maiores iusto, voluptatem officia? Eius quia
-                        ullam commodi mollitia corrupti.</p>
-                        <span>1 min ago</span>
-                    </div>
-                </div>
-                <div className="message own">
-                    <div className="texrs">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Et 
-                        incidunt quibusdam tenetur dignissimos! Deleniti suscipit numquam nihil tempora eos
-                        doloremque maiores iusto, voluptatem officia? Eius quia
-                        ullam commodi mollitia corrupti.</p>
-                        <span>1 min ago</span>
-                    </div>
-                </div>
-                <div className="message">
-                    <img src="./avatar.png" alt="" />
-                    <div className="texrs">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Et 
-                        incidunt quibusdam tenetur dignissimos! Deleniti suscipit numquam nihil tempora eos
-                        doloremque maiores iusto, voluptatem officia? Eius quia
-                        ullam commodi mollitia corrupti.</p>
-                        <span>1 min ago</span>
-                    </div>
-                </div>
-                <div className="message own">
-                    <div className="texrs">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Et 
-                        incidunt quibusdam tenetur dignissimos! Deleniti suscipit numquam nihil tempora eos
-                        doloremque maiores iusto, voluptatem officia? Eius quia
-                        ullam commodi mollitia corrupti.</p>
-                        <span>1 min ago</span>
-                    </div>
-                </div>
-                <div className={"endRef"}>
-                </div>
+                ))}
+                <div className="endRef" ref={endRef}></div>
             </div>
             <div className="bottom">
                 <div className="icons">
-                    <img src="./image.png" alt="" />
-                    <img src="./camera.png" alt="" />
-                    <img src="./mic.png" alt="" />
+                    <img src="./image.png" alt="Attachment icon" />
+                    <img src="./camera.png" alt="Camera icon" />
+                    <img src="./mic.png" alt="Microphone icon" />
                 </div>
-                <input type='text' placeholder="Type a Message...."
-                value={text}
-                onChange={e=>setText(e.target.value)}/>
+                <input
+                    type="text"
+                    placeholder="Type a Message...."
+                    value={text}
+                    onChange={(e) => setText(e.target.value)}
+                />
                 <div className="emoji">
-                    <img src="./emoji.png" 
-                    alt="" 
-                    onClick={() => setOpen((prev) => !(prev))}
+                    <img
+                        src="./emoji.png"
+                        alt="Emoji picker"
+                        // onClick={() => setOpen((prev) => !prev)} // Commented out to remove warning
                     />
                     <div className="picker">
-                        <EmojiPicker open={open} onEmojiClick={handleEmoji}/>
+                        {/* EmojiPicker component */}
                     </div>
                 </div>
-                <button className="sendButton">Send</button>
+                <button className="sendButton" onClick={handleSend}>Send</button>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Chat
+export default Chat;

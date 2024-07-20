@@ -35,7 +35,7 @@
                 img{
                     width: 2rem;
                     height: 2rem;
-                    background-color: rgb(95, 29, 29);
+                    background-color: rgba(0, 0, 0, 0.212);
                     cursor: pointer;
                     padding: .5rem;
                     border-radius: 50%;

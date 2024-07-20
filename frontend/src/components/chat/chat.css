@@ -42,7 +42,7 @@
                 p{
                     font-size:.9rem;
                     font-weight: 100;
-                    color: #a5a5a5;
+                    color:#fafafa;
                 }  
             }
         }
@@ -148,7 +148,7 @@
         }
 
         .sendButton{
-            background-color: #5183fe;
+            background-color: #07aed8;
             color:white;
             padding: .2rem .4rem;
             border: none;
