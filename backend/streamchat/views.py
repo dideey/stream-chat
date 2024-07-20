@@ -5,13 +5,14 @@ from django.contrib.auth.forms import UserCreationForm
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
 
-
+from rest_framework import status
 from django.contrib.auth.models import Group, User
 from rest_framework import permissions, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.contrib.auth import authenticate, login, logout
-from .serializers import UserSerializer, GroupSerializer, UserRegistrationSerializer
+from .serializers import UserSerializer, GroupSerializer, UserRegistrationSerializer, ProfileSerializer
+from .models import Profile, Chat, ChatGroup, GroupMessage, GroupMember
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -23,6 +24,13 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['post'], permission_classes=[permissions.AllowAny])
     def signup(self, request):
+        """
+        Register a new user.
+        - URL: POST    /users/signup/
+        - Permissions: Public (no authentication required).
+        - Request: username, password, email, etc.
+        - Response: Success or error status.
+        """
         serializer = UserRegistrationSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -31,6 +39,13 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['post'], permission_classes=[permissions.AllowAny])
     def login(self, request):
+        """
+        Log in a user.
+        - URL: POST    /users/login/
+        - Permissions: Public (no authentication required).
+        - Request: username, password.
+        - Response: Welcome message or error.
+        """
         username = request.data.get('username')
         password = request.data.get('password')
         user = authenticate(username=username, password=password)
@@ -41,8 +56,90 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['post'], permission_classes=[permissions.IsAuthenticated])
     def logout(self, request):
+        """
+        Log out the current user.
+        - URL: POST    /api/users/logout/
+        - Permissions: Authenticated users only.
+        - Request: None.
+        - Response: Logout message.
+        """
         logout(request)
         return Response({'status': 'BYEEE!!!'})
+
+    @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
+    def me(self, request):
+        """
+        Get the details of the current user.
+        - URL: GET    /users/me/
+        - Permissions: Authenticated users only.
+        - Request: None.
+        - Response: User details.
+        """
+        user = request.user
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+    
+class ProfileViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint for managing user profiles.
+    """
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
+    def retrieve_profile(self, request):
+        """
+        Get a user profile by username.
+        - URL: GET /profile/retrieve_profile/?username={username}
+        - Permissions: Authenticated users only.
+        - Request: username (as query parameter)
+        - Response: User profile data.
+        """
+        username = request.query_params.get('username')
+        if not username:
+            return Response({'error': 'Username is required'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            user = User.objects.get(username=username)
+            profile = user.profile
+        except User.DoesNotExist:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Profile.DoesNotExist:
+            return Response({'error': 'Profile not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = self.get_serializer(profile)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=['put'], permission_classes=[permissions.IsAuthenticated])
+    def update_profile(self, request):
+        """
+        Update a user profile.
+        - URL: PUT /profile/update_profile/
+        - Permissions: Authenticated users only.
+        - Request: bio, profile_pic.
+        - Response: Updated profile data.
+        """
+        profile = request.user.profile
+        serializer = self.get_serializer(profile, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
+    def my_profile(self, request):
+        """
+        Get the profile of the logged-in user.
+        - URL: GET /profile/my_profile/
+        - Permissions: Authenticated users only.
+        - Request: None.
+        - Response: Logged-in user profile data.
+        """
+        profile = request.user.profile
+        serializer = self.get_serializer(profile)
+        return Response(serializer.data)
+
 
 class GroupViewSet(viewsets.ModelViewSet):
     """
