@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
-from .models import Profile
+from .models import Profile, Chat, ChatGroup, GroupMessage, GroupMember
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -17,8 +17,8 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Group
-        fields = ['id', 'name']
+        model = ChatGroup
+        fields = '__all__'
     
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -34,3 +34,18 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             email=validated_data.get('email', '')
         )
         return user
+
+class ChatSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Chat
+        fields = '__all__'
+
+class GroupMessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GroupMessage
+        fields = '__all__'
+
+class GroupMemberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GroupMember
+        fields = '__all__'
