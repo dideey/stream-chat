@@ -18,7 +18,7 @@ const Detail = ({ selectedChat }) => {
             <div className="user">
                 <img
                     src={selectedChat.img}
-                    alt={`Profile picture of ${selectedChat.name}`}
+                    alt={`Profile picture of ${selectedChat.name}`} // This is fine if it describes the profile picture
                     onClick={handleAvatarClick}
                 />
                 <h2>{selectedChat.name}</h2>
@@ -27,40 +27,40 @@ const Detail = ({ selectedChat }) => {
                 <div className="option">
                     <div className="title">
                         <span>General Setting</span>
-                        <img src="./arrowUp.png" alt="Arrow pointing up" />
+                        <img src="./arrowUp.png" alt="" /> {/* Removed unnecessary description */}
                     </div>
                 </div>
                 <div className="option">
                     <div className="title">
                         <span>Chat Setting</span>
-                        <img src="./arrowUp.png" alt="Arrow pointing up" />
+                        <img src="./arrowUp.png" alt="" /> {/* Removed unnecessary description */}
                     </div>
                 </div>
                 <div className="option">
                     <div className="title">
                         <span>Privacy and Help</span>
-                        <img src="./arrowUp.png" alt="Arrow pointing up" />
+                        <img src="./arrowUp.png" alt="" /> {/* Removed unnecessary description */}
                     </div>
                 </div>
                 <div className="option">
                     <div className="title">
                         <span>Shared Photo</span>
-                        <img src="./arrowDown.png" alt="Arrow pointing down" />
+                        <img src="./arrowDown.png" alt="" /> {/* Removed unnecessary description */}
                     </div>
                     <div className="photos">
                         <div className="photoitems">
                             <div className="photoDetails">
-                                <img src="./download.jpeg" alt="Shared photo thumbnail" />
+                                <img src="./download.jpeg" alt="Thumbnail of a shared photo" /> {/* More descriptive */}
                                 <span>photo002</span>
                             </div>
-                            <img src="./download.png" alt="Download icon" className="icon" />
+                            <img src="./download.png" alt="Download icon" className="icon" /> {/* Descriptive for the icon */}
                         </div>
                     </div>
                 </div>
                 <div className="option">
                     <div className="title">
                         <span>Shared Files</span>
-                        <img src="./arrowUp.png" alt="Arrow pointing up" />
+                        <img src="./arrowUp.png" alt="" /> {/* Removed unnecessary description */}
                     </div>
                 </div>
                 <button>Block User</button>
