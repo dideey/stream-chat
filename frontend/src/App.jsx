@@ -4,6 +4,7 @@ import Chat from "./components/chat/Chat";
 import Detail from "./components/detail/Detail";
 import Login from "./components/login/Login";
 import Notification from "./components/notification/Notification";
+import Settings from "./components/settings/SettingsPage";
 import "./App.css";
 
 const App = () => {
