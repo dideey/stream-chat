@@ -1,17 +1,24 @@
-// src/components/ParentComponent.jsx
-import React from 'react';
-import ChatComponent from './ChatComponent';
+import React, { useState } from "react";
+import ChatList from "./ChatList";
+import Chat from "./Chat";
 
-const ParentComponent = () => {
-    const handleSelectChat = (chatId) => {
-        console.log(`Chat selected: ${chatId}`);
+const App = () => {
+    const [selectedChat, setSelectedChat] = useState(null);
+
+    const handleSelectChat = (chat) => {
+        setSelectedChat(chat);
     };
 
     return (
-        <div>
-            <ChatComponent onSelectChat={handleSelectChat} />
+        <div className="app">
+            <div className="sidebar">
+                <ChatList onSelectChat={handleSelectChat} />
+            </div>
+            <div className="main">
+                {selectedChat ? <Chat chat={selectedChat} /> : <p>Select a chat to view details</p>}
+            </div>
         </div>
     );
 };
 
-export default ParentComponent;
+export default App;

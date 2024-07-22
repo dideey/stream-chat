@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import AddUser from "./addUser/AddUser";
 import "./chatList.css";
+import AddUser from "./addUser/AddUser";
 
 const ChatList = ({ onSelectChat }) => {
     const [addMode, setAddMode] = useState(false);
@@ -26,7 +26,7 @@ const ChatList = ({ onSelectChat }) => {
         <div className="chatList">
             <div className="search">
                 <div className="searchBar">
-                    <img src="./search.png" alt="" />
+                    <img src="./search.png" alt="Search icon" />
                     <input 
                         type="search" 
                         placeholder="search" 
@@ -36,9 +36,9 @@ const ChatList = ({ onSelectChat }) => {
                 </div>
                 <img
                     src={addMode ? "./minus.png" : "./plus.png"}
-                    alt=""
+                    alt="Toggle add mode"
                     className="add"
-                    onClick={() => setAddMode((prev) => !prev)}
+                    onClick={() => setAddMode(prev => !prev)}
                 />
             </div>
 
@@ -48,7 +48,7 @@ const ChatList = ({ onSelectChat }) => {
                     key={obj.name}
                     onClick={() => onSelectChat(obj)}
                 >
-                    <img src={obj.img} alt="" />
+                    <img src={obj.img} alt={obj.name} />
                     <div className="texts">
                         <span>{obj.name}</span>
                         <p>{obj.msg}</p>

@@ -22,7 +22,6 @@ const Detail = ({ selectedChat }) => {
                     onClick={handleAvatarClick}
                 />
                 <h2>{selectedChat.name}</h2>
-                <p>{selectedChat.msg}</p>
             </div>
             <div className="info">
                 <div className="option">
