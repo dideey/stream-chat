@@ -7,19 +7,41 @@ import Notification from "./components/notification/Notification";
 import "./App.css";
 
 const App = () => {
-  const user = true;
+  const [user, setUser] = useState(null);
   const [selectedChat, setSelectedChat] = useState(null);
+
+  const handleLogin = async (credentials) => {
+    try{
+      //add the api endpoint for login
+      const response = await fetch("api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(credentials),
+      });
+      const data = await response.json();
+      if (data.success){
+        setUser({id: data.userId, name: data.userName});
+      } else{
+        console.error('Login failed');
+      }
+      } catch (error) {
+        console.error('Error occured during loggint in', error);
+      
+      }
+    }
 
   return (
     <div className="container">
       {user ? (
         <>
           <ChatList onSelectChat={setSelectedChat} />
-          <Chat selectedChat={selectedChat} />
+          <Chat userId={user.id} selectedChat={selectedChat} />
           <Detail selectedChat={selectedChat} />
         </>
       ) : (
-        <Login />
+        <Login  onLogin={handleLogin}/>
       )}
       <Notification />
     </div>

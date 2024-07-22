@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import EmojiPicker from 'emoji-picker-react';
 import "./chat.css";
 
-const Chat = () => {
+const Chat = ({userId, selectedChat}) => {
     const [text, setText] = useState("");
     const [messages, setMessages] = useState([]);
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -11,10 +11,43 @@ const Chat = () => {
     const [mediaRecorder, setMediaRecorder] = useState(null);
     const endRef = useRef(null);
     const [image, setImage] = useState(null); // Added state for image
+    const [, setChatSocket] = useState(null);
+
+    //Function to generate room name
+    const generateRoomName = (userId, recepientId) => {
+        const ids = [userId, recepientId].sort((a, b) => a - b);
+        return `personal_chat_${ids[0]}_${ids[1]}`;
+    }
 
     useEffect(() => {
         endRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
+
+    //Enables wescocket connection
+    useEffect(() => {
+    let roomName = "";
+    if (selectedChat) {
+        roomName = generateRoomName(userId, selectedChat.id);
+    }
+    const socket = new WebSocket(`ws://localhost:8000/ws/chat/${roomName}/`);
+
+    socket.onmessage = (e) => {
+    const data = JSON.parse(e.data);
+    setMessages((prevMessages) => [
+    ...prevMessages,
+    {text: data.message, own: data.sender_id === userId, timestamp: new Date()}
+
+    ])};
+
+    socket.onclose = () => {
+        console.log("Socket closed Unexpectedly");
+    };
+    setChatSocket(socket);
+    return () => {
+        socket.close();
+    
+    };
+    }, [userId, selectedChat]);
 
     useEffect(() => {
         if (isRecording && mediaRecorder) {
