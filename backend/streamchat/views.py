@@ -10,9 +10,11 @@ from django.contrib.auth.models import Group, User
 from rest_framework import permissions, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import authenticate, login, logout
-from .serializers import UserSerializer, GroupSerializer, UserRegistrationSerializer, ProfileSerializer
+from .serializers import UserSerializer, GroupSerializer, UserRegistrationSerializer, ProfileSerializer, ChatSerializer, GroupMessageSerializer, GroupMemberSerializer
 from .models import Profile, Chat, ChatGroup, GroupMessage, GroupMember
+from django.db.models import Q
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -140,6 +142,81 @@ class ProfileViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(profile)
         return Response(serializer.data)
 
+class ChatViewSet(viewsets.ModelViewSet):
+    """
+    A viewset for viewing and editing personal messages.
+    """
+    queryset = Chat.objects.all()
+    serializer_class = ChatSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the personal messages
+        for the currently authenticated user.
+        """
+        return Chat.objects.filter(
+            Q(sender=self.request.user) | Q(receiver=self.request.user)
+        ).order_by('timestamp')
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        if not queryset.exists():
+            return Response({'message': 'No messages found.'}, status=status.HTTP_204_NO_CONTENT)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=['post'], permission_classes=[IsAuthenticated])
+    def send_message(self, request):
+        """
+        Send a personal message to a specific user.
+        - URL: POST /chat/send_message/
+        - Permissions: Authenticated users only.
+        - Request: receiver (username), content.
+        - Response: Success or error status.
+        """
+        receiver_username = request.data.get('receiver')
+        try:
+            receiver = User.objects.get(username=receiver_username)
+        except User.DoesNotExist:
+            return Response({'status': 'error', 'message': 'Receiver does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(sender=self.request.user, receiver=receiver)
+            return Response({'status': 'success', 'message': 'Message sent.'})
+        return Response({'status': 'error', 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+    
+    @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated])
+    def get_messages(self, request, username=None):
+        """
+        Retrieve all personal messages exchanged with a specific user.
+        - URL: GET /chat/get_messages/?username={username}
+        - Permissions: Authenticated users only.
+        - Request: None (username is provided in the URL).
+        - Response: List of messages.
+        """
+        username = request.query_params.get('username')
+        if not username:
+            return Response({'status': 'error', 'message': 'Username parameter is required.'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            other_user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return Response({'status': 'error', 'message': 'User does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        messages = Chat.objects.filter(
+            (Q(sender=request.user) & Q(receiver=other_user)) |
+            (Q(sender=other_user) & Q(receiver=request.user))
+        ).order_by('timestamp')
+
+        page = self.paginate_queryset(messages)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(messages, many=True)
+        return Response(serializer.data)
 
 class GroupViewSet(viewsets.ModelViewSet):
     """
@@ -148,7 +225,6 @@ class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all().order_by('name')
     serializer_class = GroupSerializer
     permission_classes = [permissions.IsAuthenticated]
-
 
 
 @csrf_exempt
