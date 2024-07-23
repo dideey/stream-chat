@@ -1,0 +1,25 @@
+/* src/components/LoadingScreen.css */
+.loading-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    background-color: #f0f4f8; /* Light grayish blue background */
+    transition: opacity 1s ease;
+  }
+  
+  .loading-screen.show {
+    opacity: 1;
+  }
+  
+  .loading-screen.hide {
+    opacity: 0;
+    pointer-events: none;
+  }
+  
+  .logo {
+    width: 400px; /* Adjust as needed */
+    height: auto;
+  }
+  
