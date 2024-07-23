@@ -12,8 +12,9 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import authenticate, login, logout
-from .serializers import UserSerializer, GroupSerializer, UserRegistrationSerializer, ProfileSerializer, ChatSerializer, GroupMessageSerializer, GroupMemberSerializer
+from .serializers import UserSerializer, ChatGroupSerializer, UserRegistrationSerializer, ProfileSerializer, ChatSerializer, GroupMessageSerializer, GroupMemberSerializer
 from .models import Profile, Chat, ChatGroup, GroupMessage, GroupMember
+from django.shortcuts import get_object_or_404
 from django.db.models import Q
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -220,11 +221,191 @@ class ChatViewSet(viewsets.ModelViewSet):
 
 class GroupViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows groups to be viewed or edited.
+    API endpoint that allows viewing, creating, and managing groups.
     """
-    queryset = Group.objects.all().order_by('name')
-    serializer_class = GroupSerializer
+    queryset = ChatGroup.objects.all().order_by('group_name')
+    serializer_class = ChatGroupSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the groups
+        for the currently authenticated user.
+        """
+        return ChatGroup.objects.filter(groupmember__user=self.request.user).distinct()
+    
+    def create(self, request, *args, **kwargs):
+        """
+        Create a new group.
+        - URL: POST /group/
+        - Permissions: Authenticated users only.
+        - Request: group_name.
+        - Response: Created group data.
+        """
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            group = serializer.save()
+            GroupMember.objects.create(group=group, user=request.user)  # Ajouter le créateur comme membre
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def list(self, request, *args, **kwargs):
+        """
+        Retrieve all groups.
+        - URL: GET /group/
+        - Permissions: Authenticated users only.
+        - Request: None.
+        - Response: List of groups.
+        """
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+    
+    def update(self, request, pk=None, *args, **kwargs):
+        """
+        Update a specific group.
+        - URL: PUT /group/{pk}/
+        - Permissions: Authenticated users only.
+        - Request: group_name.
+        - Response: Updated group data.
+        """
+        queryset = self.get_queryset()
+        group = get_object_or_404(queryset, pk=pk)
+        serializer = self.get_serializer(group, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def destroy(self, request, pk=None, *args, **kwargs):
+        """
+        Delete a specific group.
+        - URL: DELETE /group/{pk}/
+        - Permissions: Authenticated users only.
+        - Request: None.
+        - Response: None.
+        """
+        queryset = self.get_queryset()
+        group = get_object_or_404(queryset, pk=pk)
+        group.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+    @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
+    def get_groups(self, request):
+        """
+        Retrieve all groups.
+        - URL: GET /group/get_groups/
+        - Permissions: Authenticated users only.
+        - Request: None.
+        - Response: List of groups.
+        """
+        groups = self.get_queryset()
+        serializer = self.get_serializer(groups, many=True)
+        return Response(serializer.data)
+    
+    @action(detail=True, methods=['get'], permission_classes=[permissions.IsAuthenticated])
+    def get_members(self, request, pk=None):
+        """
+        Retrieve all members of a specific group.
+        - URL: GET /group/get_members/{pk}/
+        - Permissions: Authenticated users only.
+        - Request: None.
+        - Response: List of members.
+        """
+        group = get_object_or_404(ChatGroup, pk=pk)
+        members = GroupMember.objects.filter(group=group)
+        serializer = GroupMemberSerializer(members, many=True)
+        return Response(serializer.data)
+    
+    @action(detail=True, methods=['get'], permission_classes=[permissions.IsAuthenticated])
+    def get_messages(self, request, pk=None):
+        """
+        Retrieve all messages in a specific group.
+        - URL: GET /group/get_messages/{pk}/
+        - Permissions: Authenticated users only.
+        - Request: None.
+        - Response: List of messages.
+        """
+        group = get_object_or_404(ChatGroup, pk=pk)
+        messages = GroupMessage.objects.filter(group=group)
+        serializer = GroupMessageSerializer(messages, many=True)
+        return Response(serializer.data)
+    
+    @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
+    def get_user_messages(self, request):
+        """
+        Retrieve all messages sent by the authenticated user.
+        - URL: GET /group/get_user_messages/
+        - Permissions: Authenticated users only.
+        - Request: None.
+        - Response: List of messages.
+        """
+        user = request.user
+        messages = GroupMessage.objects.filter(author=user)
+        serializer = GroupMessageSerializer(messages, many=True)
+        return Response(serializer.data)
+    
+    @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
+    def get_user_groups(self, request):
+        """
+        Retrieve all groups where the authenticated user is a member.
+        - URL: GET /group/get_user_groups/
+        - Permissions: Authenticated users only.
+        - Request: None.
+        - Response: List of groups.
+        """
+        user = request.user
+        groups = ChatGroup.objects.filter(groupmember__user=user)
+        serializer = self.get_serializer(groups, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=['post'], permission_classes=[permissions.IsAuthenticated])
+    def send_message(self, request, pk=None):
+        """
+        Send a message to a specific group.
+        - URL: POST /group/send_message/{pk}/
+        - Permissions: Authenticated users only.
+        - Request: body.
+        - Response: Created group message.
+        """
+        group = get_object_or_404(ChatGroup, pk=pk)
+        user = request.user
+        serializer = GroupMessageSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(group=group, author=user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
+    def retrieve_group(self, request, pk=None, *args, **kwargs):
+        """
+        Retrieve a specific group.
+        - URL: GET /group/retrieve_group/{pk}/
+        - Permissions: Authenticated users only.
+        - Request: None.
+        - Response: Group data.
+        """
+        queryset = self.get_queryset()
+        group = get_object_or_404(queryset, pk=pk)
+        serializer = self.get_serializer(group)
+        return Response(serializer.data)
+    
+    @action(detail=False, methods=['post'], permission_classes=[permissions.IsAuthenticated])
+    def add_member(self, request, pk=None):
+        """
+        Add a member to a specific group.
+        - URL: POST /group/add_member/{pk}/
+        - Permissions: Authenticated users only.
+        - Request: None.
+        - Response: Created group member.
+        """
+        group = get_object_or_404(ChatGroup, pk=pk)
+        user_id = request.data.get('user_id')
+        if not user_id:
+            return Response({'error': 'user_id is required'}, status=status.HTTP_400_BAD_REQUEST)
+        user = get_object_or_404(User, pk=user_id)
+        GroupMember.objects.create(group=group, user=user)
+        return Response({'status': 'success', 'message': 'Member added'}, status=status.HTTP_201_CREATED)
 
 
 @csrf_exempt
