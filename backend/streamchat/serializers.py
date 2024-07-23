@@ -18,7 +18,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = ChatGroup
-        fields = '__all__'
+        fields = ['id', 'group_name']
     
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -40,12 +40,17 @@ class ChatSerializer(serializers.ModelSerializer):
         model = Chat
         fields = '__all__'
 
+class ChatGroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ChatGroup
+        fields = '__all__'
+
 class GroupMessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = GroupMessage
-        fields = '__all__'
+        fields = ['id', 'group', 'author', 'body', 'created_at']
 
 class GroupMemberSerializer(serializers.ModelSerializer):
     class Meta:
         model = GroupMember
-        fields = '__all__'
+        fields = ['id', 'group', 'user']
