@@ -11,10 +11,10 @@ const AuthPage = () => {
     confirmPassword: '',
   });
   const [errorMessage, setErrorMessage] = useState('');
-
+  
+  // Ensure the baseURL is correct
   const baseURL = process.env.REACT_APP_BASE_URL;
-
-  console.log('Base URL:', baseURL); 
+  console.log('Base URL:', baseURL); // Debugging line
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -32,26 +32,27 @@ const AuthPage = () => {
       }
 
       try {
-        const response = await axios.post(`${baseURL}/users/signup`, {
+        const response = await axios.post(`${baseURL}/users/signup/`, {
           username: formData.username,
-          password: formData.password,
           email: formData.email,
+          password: formData.password,
         });
-        console.log(response.data);
         // Handle successful signup
+        console.log('Signup response:', response.data);
       } catch (error) {
-        // Handle signup error
-        setErrorMessage(error.response || error.message);
+        console.error('Signup Error:', error.response || error.message);
+        setErrorMessage('An error occurred during signup.');
       }
     } else {
       try {
-        const response = await axios.post(`${baseURL}/api/login`, {
+        const response = await axios.post(`${baseURL}/users/login/`, {
           username: formData.username,
           password: formData.password,
         });
         // Handle successful login
+        console.log('Login response:', response.data);
       } catch (error) {
-        // Handle login error
+        console.error('Login Error:', error.response || error.message);
         setErrorMessage('An error occurred during login.');
       }
     }
