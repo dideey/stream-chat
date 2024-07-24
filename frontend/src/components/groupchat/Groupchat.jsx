@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { firestore, auth, storage } from '../firebase';
 import { format } from 'date-fns';
 import './GroupChat.css';
 
@@ -9,42 +8,53 @@ const GroupChat = ({ user }) => {
   const [typing, setTyping] = useState(false);
   const [file, setFile] = useState(null);
 
+  // Mock fetching messages from the backend
   useEffect(() => {
-    const unsubscribe = firestore
-      .collection('groupChats')
-      .orderBy('createdAt')
-      .onSnapshot((snapshot) => {
-        const messagesData = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data()
-        }));
-        setMessages(messagesData);
-      });
-
-    return () => unsubscribe();
+    const mockMessages = [
+      {
+        id: 1,
+        text: 'Hello everyone!',
+        timestamp: new Date().toISOString(),
+        uid: '1',
+        displayName: 'Alice',
+        fileUrl: null,
+        fileName: null,
+      },
+      {
+        id: 2,
+        text: 'Hi Alice!',
+        timestamp: new Date().toISOString(),
+        uid: '2',
+        displayName: 'Bob',
+        fileUrl: null,
+        fileName: null,
+      },
+    ];
+    setMessages(mockMessages);
   }, []);
 
-  const handleSendMessage = async (e) => {
+  const handleSendMessage = (e) => {
     e.preventDefault();
     if (user && newMessage.trim()) {
       let messageData = {
+        id: messages.length + 1,
         text: newMessage,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        timestamp: new Date().toISOString(),
         uid: user.uid,
         displayName: user.displayName,
-        timestamp: new Date().toISOString()
+        fileUrl: null,
+        fileName: null,
       };
 
       if (file) {
-        const fileRef = storage.ref(`chatFiles/${file.name}`);
-        await fileRef.put(file);
-        const fileUrl = await fileRef.getDownloadURL();
+        // Mock file upload and URL
+        const fileUrl = URL.createObjectURL(file);
         messageData.fileUrl = fileUrl;
         messageData.fileName = file.name;
         setFile(null);
       }
 
-      await firestore.collection('groupChats').add(messageData);
+      setMessages((prevMessages) => [...prevMessages, messageData]);
       setNewMessage('');
     }
   };

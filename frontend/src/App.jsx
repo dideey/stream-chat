@@ -24,6 +24,9 @@ const App = () => {
       )}
       <Notification />
     </div>
+	<div>
+	  <Groupchat/>
+	</div>
   );
 };
 

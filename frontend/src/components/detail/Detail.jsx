@@ -16,9 +16,7 @@ const Detail = ({ selectedChat }) => {
     return (
         <div className="detail">
             <div className="user">
-                <img
-                    src={selectedChat.img}
-                    alt={`Profile picture of ${selectedChat.name}`} // This is fine if it describes the profile picture
+                <img src={selectedChat.img} alt={`Profile picture of ${selectedChat.name}`} // This is fine if it describes the profile picture
                     onClick={handleAvatarClick}
                 />
                 <h2>{selectedChat.name}</h2>
@@ -53,7 +51,7 @@ const Detail = ({ selectedChat }) => {
                                 <img src="./download.jpeg" alt="Thumbnail of a shared photo" /> {/* More descriptive */}
                                 <span>photo002</span>
                             </div>
-                            <img src="./download.png" alt="Download icon" className="icon" /> {/* Descriptive for the icon */}
+                            <img src="./download.png" alt="Downloaded icon" className="icon" /> {/* Descriptive for the icon */}
                         </div>
                     </div>
                 </div>
