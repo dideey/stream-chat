@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from 'react';
 import EmojiPicker from 'emoji-picker-react';
-import "./chat.css";
+import './chat.css';
 import axios from 'axios';
 
-const Chat = ({userId, selectedChat}) => {
+const Chat = ({ userId, selectedChat }) => {
     const [text, setText] = useState("");
     const [messages, setMessages] = useState([]);
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -11,43 +11,40 @@ const Chat = ({userId, selectedChat}) => {
     const [isRecording, setIsRecording] = useState(false);
     const [mediaRecorder, setMediaRecorder] = useState(null);
     const endRef = useRef(null);
-    const [image, setImage] = useState(null); // Added state for image
-    const [, setChatSocket] = useState(null);
+    const [image, setImage] = useState(null);
 
-    //Function to generate room name
-    const generateRoomName = (userId, recepientId) => {
-        const ids = [userId, recepientId].sort((a, b) => a - b);
+    // Function to generate room name
+    const generateRoomName = (userId, recipientId) => {
+        const ids = [userId, recipientId].sort((a, b) => a - b);
         return `personal_chat_${ids[0]}_${ids[1]}`;
-    }
+    };
 
     useEffect(() => {
         endRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
 
-    //Enables wescocket connection
+    // Enables WebSocket connection
     useEffect(() => {
-    let roomName = "";
-    if (selectedChat) {
-        roomName = generateRoomName(userId, selectedChat.id);
-    }
-    const socket = new WebSocket(`ws://localhost:8000/ws/chat/${roomName}/`);
+        if (!selectedChat) return; // Do not set up socket if no selected chat
 
-    socket.onmessage = (e) => {
-    const data = JSON.parse(e.data);
-    setMessages((prevMessages) => [
-    ...prevMessages,
-    {text: data.message, own: data.sender_id === userId, timestamp: new Date()}
+        const roomName = generateRoomName(userId, selectedChat.id);
+        const socket = new WebSocket(`ws://localhost:8000/ws/chat/${roomName}/`);
 
-    ])};
+        socket.onmessage = (e) => {
+            const data = JSON.parse(e.data);
+            setMessages((prevMessages) => [
+                ...prevMessages,
+                { text: data.message, own: data.sender_id === userId, timestamp: new Date() }
+            ]);
+        };
 
-    socket.onclose = () => {
-        console.log("Socket closed Unexpectedly");
-    };
-    setChatSocket(socket);
-    return () => {
-        socket.close();
-    
-    };
+        socket.onclose = () => {
+            console.log("Socket closed unexpectedly");
+        };
+
+        return () => {
+            socket.close();
+        };
     }, [userId, selectedChat]);
 
     useEffect(() => {
@@ -93,7 +90,7 @@ const Chat = ({userId, selectedChat}) => {
                 ...prevMessages,
                 { text, own: true, timestamp: new Date(), audio: audioURL, image: image }
             ]);
-            
+
             // Reset inputs
             setText("");
             setAudioURL(null);
@@ -114,7 +111,6 @@ const Chat = ({userId, selectedChat}) => {
         }
     };
 
-
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
             handleSend();
@@ -133,26 +129,34 @@ const Chat = ({userId, selectedChat}) => {
         }
     };
 
+    if (!selectedChat) {
+        return <div>No chat selected</div>; // Fallback if no chat is selected
+    }
+
     return (
         <div className="chat">
             <div className="top">
-                <div className="user">
-                    <img src="./avatar6.png" alt="Esther" />
-                    <div className="texts">
-                        <span>Esther</span>
-                        <p>Lorem ipsum dolor sit amet.</p>
-                    </div>
-                </div>
-                <div className="icons">
-                    <img src="./phone.png" alt="Phone icon" />
-                    <img src="./video.png" alt="Video call icon" />
-                    <img src="./info.png" alt="Information icon" />
-                </div>
+                {selectedChat && (
+                    <>
+                        <div className="user">
+                            <img src={selectedChat.img || "./default-avatar.png"} alt={selectedChat.name} />
+                            <div className="texts">
+                                <span>{selectedChat.name}</span>
+                                <p>Lorem ipsum dolor sit amet.</p>
+                            </div>
+                        </div>
+                        <div className="icons">
+                            <img src="./phone.png" alt="Phone icon" />
+                            <img src="./video.png" alt="Video call icon" />
+                            <img src="./info.png" alt="Information icon" />
+                        </div>
+                    </>
+                )}
             </div>
             <div className="center">
                 {messages.map((msg, index) => (
                     <div className={`message ${msg.own ? "own" : ""}`} key={index}>
-                        {msg.own ? null : <img src="./avatar6.png" alt="Esther's avatar" />}
+                        {msg.own ? null : <img src="./default-avatar.png" alt="Sender's avatar" />}
                         <div className="texts">
                             <p>{msg.text}</p>
                             {msg.audio && <audio controls src={msg.audio} />}

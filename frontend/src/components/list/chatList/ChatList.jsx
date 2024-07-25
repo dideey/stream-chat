@@ -1,26 +1,36 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import "./chatList.css";
 import AddUser from "./addUser/AddUser";
 
 const ChatList = ({ onSelectChat }) => {
     const [addMode, setAddMode] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
+    const navigate = useNavigate(); // Initialize useNavigate
 
     const chatItems = [
-        { img: './avatar4.png', name: 'Yetunde Adams', msg: 'Hello' },
-        { img: './avatar 3.png', name: 'Timile Ben', msg: 'Hello' },
-        { img: './avatar5.jpeg', name: 'Imole K.', msg: 'Chimobi!' },
-        { img: './avatar6.png', name: 'Esther.', msg: 'how are you!' },
-        { img: './avatar8.png', name: 'jimi.', msg: 'how are you!' },
-        { img: './avatar9.jpeg', name: 'lusee.', msg: 'how are you!' },
-        { img: './avatar10.png', name: 'ife.', msg: 'how are you!' },
-        { img: './avatar11.jpeg', name: 'mark.', msg: 'how are you!' },
-        { img: './avatar1.png', name: 'veekey.', msg: 'how are you!' },
+        { id: 1, img: './avatar4.png', name: 'Yetunde Adams', msg: 'Hello' },
+        { id: 2, img: './avatar 3.png', name: 'Timile Ben', msg: 'Hello' },
+        { id: 3, img: './avatar5.jpeg', name: 'Imole K.', msg: 'Chimobi!' },
+        { id: 4, img: './avatar6.png', name: 'Esther.', msg: 'how are you!' },
+        { id: 5, img: './avatar8.png', name: 'jimi.', msg: 'how are you!' },
+        { id: 6, img: './avatar9.jpeg', name: 'lusee.', msg: 'how are you!' },
+        { id: 7, img: './avatar10.png', name: 'ife.', msg: 'how are you!' },
+        { id: 8, img: './avatar11.jpeg', name: 'mark.', msg: 'how are you!' },
+        { id: 9, img: './avatar1.png', name: 'veekey.', msg: 'how are you!' },
     ];
 
     const filteredChatItems = chatItems.filter(chat => 
         chat.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
+
+    const handleChatSelection = (chat) => {
+        console.log('Selected chat:', chat); // Debugging
+        onSelectChat(chat); // Set the selected chat in the parent component
+        navigate(`/chat/${chat.id}`); // Navigate to the chat route
+    }
+
+  
 
     return (
         <div className="chatList">
@@ -45,8 +55,8 @@ const ChatList = ({ onSelectChat }) => {
             {filteredChatItems.map((obj) => (
                 <div
                     className="item"
-                    key={obj.name}
-                    onClick={() => onSelectChat(obj)}
+                    key={obj.id}
+                    onClick={() => handleChatSelection(obj)}
                 >
                     <img src={obj.img} alt={obj.name} />
                     <div className="texts">

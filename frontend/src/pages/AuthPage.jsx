@@ -48,7 +48,7 @@ const AuthPage = () => {
       
       if (response.data.status === 'success' || response.data.status.startsWith('Hello')) {
         // Redirect to the home page on success
-        console.log(response.data);
+        console.log('Navigation to home page');
         navigate('/home');
       } else {
         setErrorMessage(response.data.message || 'An error occurred.');

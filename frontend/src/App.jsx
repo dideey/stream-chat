@@ -8,6 +8,8 @@ import LoadingScreen from "./components/LoadingScreen";
 import AuthPage from "./pages/AuthPage";
 import logo from "./assets/logo.png";
 import "./pages/AuthPage.css";
+import ChatComponent from './components/ChatComponent'
+
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -39,16 +41,14 @@ const App = () => {
         <Routes>
           <Route path="/" element={<LoadingScreen logo={logo} />} />
           <Route path="/login" element={<AuthPage onLogin={handleLogin} />} />
+          <Route path="/home" element={<ChatList onSelectChat={setSelectedChat} />} />
+
           {/* Additional routes */}
           <Route
-            path="/chat"
+            path="/chat/:chatId"
             element={
               user ? (
-                <>
-                  <ChatList onSelectChat={setSelectedChat} />
                   <Chat userId={user.id} selectedChat={selectedChat} />
-                  <Detail selectedChat={selectedChat} />
-                </>
               ) : (
                 <AuthPage onLogin={handleLogin} />
               )

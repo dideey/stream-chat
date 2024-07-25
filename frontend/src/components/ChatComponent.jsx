@@ -1,9 +1,14 @@
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+
 const ChatComponent = ({ onSelectChat }) => {
+    const navigate = useNavigate();
+
     const handleClick = () => {
-        console.log(onSelectChat); // Check if this logs the function
         const chatId = 1; // Example chat ID
         if (typeof onSelectChat === 'function') {
-            onSelectChat(chatId);
+            onSelectChat(chatId); // Update state or handle chat selection
+            navigate(`/chat/${chatId}`); // Navigate to the chat page
         } else {
             console.error('onSelectChat is not a function');
         }
@@ -16,3 +21,4 @@ const ChatComponent = ({ onSelectChat }) => {
     );
 };
 
+export default ChatComponent;
