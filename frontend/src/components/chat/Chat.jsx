@@ -85,17 +85,34 @@ const Chat = ({userId, selectedChat}) => {
         };
     }, [mediaRecorder]);
 
-    const handleSend = () => {
+    const handleSend = async () => {
         if (text.trim() !== "") {
+            // Send message to the WebSocket
             setMessages((prevMessages) => [
                 ...prevMessages,
                 { text, own: true, timestamp: new Date(), audio: audioURL, image: image }
             ]);
+            
+            // Reset inputs
             setText("");
             setAudioURL(null);
-            setImage(null); // Clear image after sending
+            setImage(null);
+
+            // Send message to the API
+            try {
+                await axios.post('http://195.35.37.100:8000/chat/', {
+                    sender_id: userId,
+                    receiver_id: selectedChat.id,
+                    message: text,
+                    audio: audioURL,
+                    image: image
+                });
+            } catch (error) {
+                console.error("Error sending message:", error);
+            }
         }
     };
+
 
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
