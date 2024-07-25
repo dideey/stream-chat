@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import EmojiPicker from 'emoji-picker-react';
 import "./chat.css";
+import axios from 'axios';
 
 const Chat = ({userId, selectedChat}) => {
     const [text, setText] = useState("");

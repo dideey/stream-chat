@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import './AuthPage.css'; // Importing CSS for this page
 
 const AuthPage = () => {
@@ -15,6 +16,7 @@ const AuthPage = () => {
   // Ensure the baseURL is correct
   const baseURL = process.env.REACT_APP_BASE_URL;
   console.log('Base URL:', baseURL); // Debugging line
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,36 +27,35 @@ const AuthPage = () => {
     e.preventDefault();
     setErrorMessage('');
 
-    if (isSignup) {
-      if (formData.password !== formData.confirmPassword) {
-        setErrorMessage('Passwords do not match.');
-        return;
-      }
-
-      try {
-        const response = await axios.post(`${baseURL}/users/signup/`, {
+    try {
+      let response;
+      if (isSignup) {
+        if (formData.password !== formData.confirmPassword) {
+          setErrorMessage('Passwords do not match.');
+          return;
+        }
+        response = await axios.post(`${baseURL}/users/signup/`, {
           username: formData.username,
           email: formData.email,
           password: formData.password,
         });
-        // Handle successful signup
-        console.log('Signup response:', response.data);
-      } catch (error) {
-        console.error('Signup Error:', error.response || error.message);
-        setErrorMessage('An error occurred during signup.');
-      }
-    } else {
-      try {
-        const response = await axios.post(`${baseURL}/users/login/`, {
+      } else {
+        response = await axios.post(`${baseURL}/users/login/`, {
           username: formData.username,
           password: formData.password,
         });
-        // Handle successful login
-        console.log('Login response:', response.data);
-      } catch (error) {
-        console.error('Login Error:', error.response || error.message);
-        setErrorMessage('An error occurred during login.');
       }
+      
+      if (response.data.status === 'success' || response.data.status.startsWith('Hello')) {
+        // Redirect to the home page on success
+        console.log(response.data);
+        navigate('/home');
+      } else {
+        setErrorMessage(response.data.message || 'An error occurred.');
+      }
+    } catch (error) {
+      console.error('Error:', error.response || error.message);
+      setErrorMessage('An error occurred. Please try again.');
     }
   };
 
