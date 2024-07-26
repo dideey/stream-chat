@@ -1,0 +1,35 @@
+.navigation {
+  background-color: white;
+  overflow: hidden;
+  border-bottom: 1px solid #ccc;
+}
+
+.navigation ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+.navigation li {
+  margin-right: 10px;
+}
+
+.navigation li a {
+  display: block;
+  color: navy;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.navigation li a:hover {
+  background-color: #f0f0f0;
+}
+
+.active {
+  background-color: navy;
+  color: white;
+}
