@@ -1,19 +1,48 @@
-import "./userInfo.css"
+import React, { useState } from "react";
+import "./addUser.css";
 
-const Userinfo = () => {
-    return (
-        <div className="userInfo">
-            <div className="user">
-            <img src="./avatar.png" alt=""/>
-            <h2>Tim jay</h2>
-            </div>
-            <div className="icons">
-                <img src="./more.png" alt=""/>
-                <img src="./video.png" alt=""/>
-                <img src="./edit.png" alt=""/>
-            </div>
+const AddUser = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(`https://your-backend-api.com/search-user?query=${searchQuery}`);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      setSearchResults(data);
+    } catch (error) {
+      console.error('There was a problem with the fetch operation:', error);
+    }
+  };
+
+  return (
+    <div className="addUser">
+      <form onSubmit={handleSearch}>
+        <input
+          type="text"
+          placeholder="username"
+          name="username"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        <button type="submit">Search</button>
+      </form>
+      {searchResults.map((user) => (
+        <div className="user" key={user.id}>
+          <div className="detail">
+            <img src={user.img} alt="Avatar" />
+            <span>{user.name}</span>
+          </div>
+          <button>Add User</button>
         </div>
-    )
-}
+      ))}
+    </div>
+  );
+};
 
-export default Userinfo
+export default AddUser;
+

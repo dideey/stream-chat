@@ -5,6 +5,7 @@ import Detail from "./components/detail/Detail";
 import Login from "./components/login/Login";
 import Notification from "./components/notification/Notification";
 import "./App.css";
+import Groupchat from "./components/groupchat/Groupchat";
 
 const App = () => {
   const user = true;
@@ -23,6 +24,9 @@ const App = () => {
       )}
       <Notification />
     </div>
+	<div>
+	  <Groupchat/>
+	</div>
   );
 };
 
