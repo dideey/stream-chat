@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
-from rest_framework.permissions import AllowAny
+
 
 from rest_framework import status
 from django.contrib.auth.models import Group, User
@@ -168,7 +168,7 @@ class ChatViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, methods=['post'], permission_classes=[AllowAny])
+    @action(detail=False, methods=['post'], permission_classes=[IsAuthenticated])
     def send_message(self, request):
         """
         Send a personal message to a specific user.
