@@ -5,6 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
 
+
 from rest_framework import status
 from django.contrib.auth.models import Group, User
 from rest_framework import permissions, viewsets
