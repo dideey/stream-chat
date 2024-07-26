@@ -25,7 +25,7 @@ const Chat = ({ userId, selectedChat }) => {
 
     // Enables WebSocket connection
     useEffect(() => {
-        if (!selectedChat) return; // Do not set up socket if no selected chat
+        if (!selectedChat || selectedChat.id) return; // Do not set up socket if no selected chat
 
         const roomName = generateRoomName(userId, selectedChat.id);
         const socket = new WebSocket(`ws://localhost:8000/ws/chat/${roomName}/`);
@@ -98,13 +98,16 @@ const Chat = ({ userId, selectedChat }) => {
 
             // Send message to the API
             try {
-                await axios.post('http://195.35.37.100:8000/chat/', {
+                const response = await axios.post('http://195.35.37.100:8000/chat/', {
+                    message: text,
                     sender_id: userId,
                     receiver_id: selectedChat.id,
-                    message: text,
-                    audio: audioURL,
-                    image: image
+                }, {
+                    Headers: {
+                        'Content-Type': 'application/json',
+                    }
                 });
+                console.log('Message sent:', response.data);
             } catch (error) {
                 console.error("Error sending message:", error);
             }
