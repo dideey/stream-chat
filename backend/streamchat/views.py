@@ -177,6 +177,11 @@ class ChatViewSet(viewsets.ModelViewSet):
         - Request: receiver (username), content.
         - Response: Success or error status.
         """
+        if request.method == 'OPTIONS':
+        response = JsonResponse({'detail': 'CORS preflight'})
+        response['Access-Control-Allow-Origin'] = 'http://localhost:3000'
+        response['Access-Control-Allow-Methods'] = 'POST, OPTIONS'
+        response['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
         receiver_username = request.data.get('receiver')
         try:
             receiver = User.objects.get(username=receiver_username)
