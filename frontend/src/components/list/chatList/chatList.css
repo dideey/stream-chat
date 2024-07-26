@@ -1,0 +1,106 @@
+.chatList {
+    flex: 1;
+    overflow: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(222, 227, 231, 0.6) transparent;
+
+    &::-webkit-scrollbar {
+        width:.1rem;
+        background-color: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: rgba(238, 246, 255, 0.5) transparent;
+        border-radius: .2rem;
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+
+
+    .profile img {
+        width: 4rem;
+        height: 4rem;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-top: 1.6rem;
+    }
+
+
+    .chats img{
+        display: font-size;
+        margin-left: 17rem;
+        cursor: pointer;
+        
+    }
+    .search {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        padding: .2rem;
+
+        .searchBar {
+            flex: 1;
+            background-color:rgb(21, 163, 219);;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            border-radius: .9rem;
+            padding: .1rem;
+
+            input {
+                background-color: transparent;
+                border: none;
+                outline: none;
+                color: white;
+                flex: 1;
+                font-size: 1.2rem;
+            }
+
+            img {
+                width: 1.1rem;
+                height: 1.1rem;
+            }
+        }
+
+        .add {
+            width: 2.5rem;
+            height: 2.5rem;
+            background:rgb(21, 163, 219);
+            padding: 1rem;
+            border-radius: .1rem;
+        }
+    }
+
+    .item {
+        display: flex;
+        align-items: center;
+        gap: 1.4rem;
+        padding: 1rem;
+        cursor: pointer;
+        border-bottom: .1rem solid #dddddd35;
+
+        img {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .text {
+            display: flex;
+            flex-direction: column;
+            gap: .6rem;
+
+            span {
+                font-weight: 300;
+            }
+
+            p {
+                font-size: 1.1rem;
+                font-weight: 100;
+            }
+        }
+    }
+}

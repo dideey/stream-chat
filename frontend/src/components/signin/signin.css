@@ -1,0 +1,131 @@
+.formcontainer {
+    background: #225e70;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .formWrapper {
+        background: white;
+        padding: 2rem  6rem;
+        border-radius: 3rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        align-items: center;
+    
+        .logo {
+            color: #2e55d4;
+            font-weight: bold;
+            font-size: 1.8rem;
+        }
+    
+        .title {
+            color: #2e55d4;
+            font-size:1.1rem;
+        }
+        form{
+            display: flex;
+            flex-direction: column;
+            gap:1.3rem;
+    
+            input{
+                padding: .2rem;
+                border:none;
+                width: 20;
+                border-bottom: .1rem solid#000000;
+    
+            }
+    
+            button {
+                background: #2e55d4;
+                color:white;
+                border-radius: 1.7rem;
+                padding: 1rem;
+                font-weight: bold;
+                border: none;
+                cursor: pointer;
+            }
+          label {
+            display: flex;
+            align-items: center;
+            gap: .7rem;
+            color: #0b495c;
+            font-size: 1.1rem;
+          }
+
+          img{
+            width: 3.1rem;
+          }
+        }
+        p{
+            color: #2e55d4;
+            font-size: 1.2rem;
+            margin-top: .7rem;
+        }
+    }
+
+}
+
+
+.home {
+    background-color: #2e55d4;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .container {
+        border:.1rem solid #fafafa;
+        border-radius: 1rem;
+        width:65%;
+        height: 80%;
+        display: flex;
+        overflow: hidden;
+
+        .sidebar {
+            flex:1;
+            border-right:#2f44bb;
+
+            .navbar {
+                display: flex;
+                align-items: center;
+                background:#1c234d;
+                height: 4rem;
+                padding: 1rem;
+                justify-content: space-between;
+                color: #ddddf7;
+
+                .logo {
+                    font-weight: bold;
+                }
+
+                .user {
+                    display: flex;
+                    gap: 1rem;
+
+
+                    .img {
+                        background-color: #ddddf7;
+                        height: 2.2rem;
+                        width: 2.2rem;
+                        border-radius: 50rem;
+                        object-fit: cover;
+                    }
+
+                    button{
+                        background-color: #3668d4;
+                        color: #ddddf7;
+                        border: none;
+                        font-size: 1rem;
+                        cursor: pointer;
+                    }
+
+                }
+            }
+        }
+        .chat {flex:2;}
+    }
+}
+
+
