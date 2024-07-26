@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import ChatList from "./components/list/chatList/ChatList";
 import Chat from "./components/chat/Chat";
 import Detail from "./components/detail/Detail";
@@ -7,7 +7,7 @@ import Login from "./components/login/Login";
 import Notification from "./components/notification/Notification";
 import Groupchat from "./components/groupchat/Groupchat";
 import Navigation from "./components/navigation/Navigation";
-import Settings from "./components/setingspage/SettingsPage";
+import Settings from "./components/settings/SettingsPage";
 import Requests from "./components/requests/Requests";
 import "./App.css";
 
@@ -20,22 +20,18 @@ const App = () => {
       <div className="container">
         <Navigation />
         {user ? (
-          <Switch>
-            <Route exact path="/">
-              <ChatList onSelectChat={setSelectedChat} />
-              <Chat selectedChat={selectedChat} />
-              <Detail selectedChat={selectedChat} />
-            </Route>
-            <Route path="/settings">
-              <Settings />
-            </Route>
-            <Route path="/requests">
-              <Requests />
-            </Route>
-            <Route path="/groupchat">
-              <Groupchat />
-            </Route>
-          </Switch>
+          <Routes>
+            <Route path="/" element={
+              <>
+                <ChatList onSelectChat={setSelectedChat} />
+                <Chat selectedChat={selectedChat} />
+                <Detail selectedChat={selectedChat} />
+              </>
+            } />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/requests" element={<Requests />} />
+            <Route path="/groupchat" element={<Groupchat />} />
+          </Routes>
         ) : (
           <Login />
         )}

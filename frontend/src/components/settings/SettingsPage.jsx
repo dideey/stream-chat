@@ -13,7 +13,7 @@ const Settings = () => {
     const handleImageUpload = (event) => {
         if (event.target.files && event.target.files[0]) {
             const file = URL.createObjectURL(event.target.files[0]);
-            setProfileImage(file);S
+            setProfileImage(file);
         }
     };
 
