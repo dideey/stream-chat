@@ -218,6 +218,25 @@ class ChatViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(messages, many=True)
         return Response(serializer.data)
+    
+    @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated])
+    def search_user(self, request):
+        """
+        Search for users by username.
+        - URL: GET /chat/search_user/?query=<username>.
+        - Permissions: Authenticated users only.
+        - Response: List of users matching the query.
+        """
+        query = request.query_params.get('query', None)
+        if not query:
+            return Response({'status': 'error', 'message': 'Query parameter is required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        users = User.objects.filter(username__icontains=query)
+        if not users.exists():
+            return Response({'status': 'error', 'message': 'No users found matching the query.'}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = UserSerializer(users, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 class GroupViewSet(viewsets.ModelViewSet):
     """
