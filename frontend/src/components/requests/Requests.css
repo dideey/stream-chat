@@ -1,0 +1,34 @@
+.requests {
+  padding: 20px;
+  background-color: #f9f9f9;
+}
+
+.requests h2 {
+  margin-bottom: 20px;
+}
+
+.request-section {
+  margin-bottom: 30px;
+}
+
+.request-section h3 {
+  margin-bottom: 10px;
+  color: navy;
+}
+
+.request-section ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.request-section li {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.request-section li strong {
+  color: navy;
+}
