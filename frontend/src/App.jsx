@@ -18,28 +18,28 @@ const App = () => {
   return (
     <Router>
       <div className="container">
-        <div className="main-content">
-          {user ? (
-            <Routes>
-              <Route path="/" element={
-                <>
-                  <ChatList onSelectChat={setSelectedChat} />
-                  <Chat selectedChat={selectedChat} />
-                  <Detail selectedChat={selectedChat} />
-                </>
-              } />
-              <Route path="/settings" element={<Settings />} />
-              <Route path="/requests" element={<Requests />} />
-              <Route path="/groupchat" element={<Groupchat />} />
-            </Routes>
-          ) : (
-            <Login />
-          )}
-          <Notification />
-        </div>
-        <div className="navigation">
-          <Navigation />
-        </div>
+        {user ? (
+          <>
+            <div className="main-content">
+              <Routes>
+                <Route path="/" element={
+                  <>
+                    <ChatList onSelectChat={setSelectedChat} />
+                    <Chat selectedChat={selectedChat} />
+                    <Detail selectedChat={selectedChat} />
+                  </>
+                } />
+                <Route path="/settings" element={<Settings />} />
+                <Route path="/requests" element={<Requests />} />
+                <Route path="/groupchat" element={<Groupchat />} />
+              </Routes>
+              <Notification />
+            </div>
+            <Navigation />
+          </>
+        ) : (
+          <Login />
+        )}
       </div>
     </Router>
   );
