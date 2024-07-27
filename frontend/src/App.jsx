@@ -7,7 +7,7 @@ import Login from "./components/login/Login";
 import Notification from "./components/notification/Notification";
 import Groupchat from "./components/groupchat/Groupchat";
 import Navigation from "./components/navigation/Navigation";
-import Settings from "./components/settingspage/SettingsPage";
+import Settings from "./components/settings/SettingsPage";
 import Requests from "./components/requests/Requests";
 import "./App.css";
 
