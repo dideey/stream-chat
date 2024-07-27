@@ -7,7 +7,7 @@ import Login from "./components/login/Login";
 import Notification from "./components/notification/Notification";
 import Groupchat from "./components/groupchat/Groupchat";
 import Navigation from "./components/navigation/Navigation";
-import Settings from "./components/settings/SettingsPage";
+import Settings from "./components/settingspage/SettingsPage";
 import Requests from "./components/requests/Requests";
 import "./App.css";
 
@@ -18,24 +18,28 @@ const App = () => {
   return (
     <Router>
       <div className="container">
-        <Navigation />
-        {user ? (
-          <Routes>
-            <Route path="/" element={
-              <>
-                <ChatList onSelectChat={setSelectedChat} />
-                <Chat selectedChat={selectedChat} />
-                <Detail selectedChat={selectedChat} />
-              </>
-            } />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/requests" element={<Requests />} />
-            <Route path="/groupchat" element={<Groupchat />} />
-          </Routes>
-        ) : (
-          <Login />
-        )}
-        <Notification />
+        <div className="main-content">
+          {user ? (
+            <Routes>
+              <Route path="/" element={
+                <>
+                  <ChatList onSelectChat={setSelectedChat} />
+                  <Chat selectedChat={selectedChat} />
+                  <Detail selectedChat={selectedChat} />
+                </>
+              } />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="/requests" element={<Requests />} />
+              <Route path="/groupchat" element={<Groupchat />} />
+            </Routes>
+          ) : (
+            <Login />
+          )}
+          <Notification />
+        </div>
+        <div className="navigation">
+          <Navigation />
+        </div>
       </div>
     </Router>
   );

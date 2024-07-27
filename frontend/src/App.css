@@ -36,3 +36,50 @@
     transform: rotate(360deg);
   }
 }
+
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px; /* Adjust padding as needed */
+}
+
+.navigation {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: white;
+  border-top: 1px solid #ccc;
+  z-index: 1000;
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    padding: 10px;
+  }
+
+  .navigation li a {
+    padding: 8px;
+  }
+}
+
+@media (min-width: 769px) {
+  .main-content {
+    padding: 20px;
+  }
+
+  .navigation li a {
+    padding: 12px;
+  }
+}
