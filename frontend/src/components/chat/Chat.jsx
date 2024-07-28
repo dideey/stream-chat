@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import EmojiPicker from 'emoji-picker-react';
 import './chat.css';
 import axios from 'axios';
+import refreshAccessToken from '../refreshtoken';
 
 const Chat = ({ userId, selectedChat }) => {
     const [text, setText] = useState("");
@@ -90,30 +91,40 @@ const Chat = ({ userId, selectedChat }) => {
                 ...prevMessages,
                 { text, own: true, timestamp: new Date(), audio: audioURL, image: image }
             ]);
-
+    
             // Reset inputs
             setText("");
             setAudioURL(null);
             setImage(null);
-
-            // Send message to the API
+    
             try {
-                const response = await axios.post('http://195.35.37.100:8000/chat/', {
-                    message: text,
-                    sender_id: userId,
-                    receiver_id: selectedChat.id,
+                // Retrieve access token from localStorage
+                let accessToken = localStorage.getItem('accessToken');
+                console.log(accessToken)
+    
+                // Optionally refresh the access token if expired
+                accessToken = await refreshAccessToken() || accessToken;
+    
+                // Send message to the API
+                const response = await axios.post('http://195.35.37.100:8000/chat/send_message/', {
+                    receiver: selectedChat.username, // Adjust if needed
+                    content: text,
                 }, {
-                    Headers: {
+                    headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${accessToken}`, // Include the token
                     }
                 });
+    
                 console.log('Message sent:', response.data);
             } catch (error) {
-                console.error("Error sending message:", error);
+                console.error("Error sending message:", error.response ? error.response.data : error.message);
+                // Handle errors (e.g., redirect to login if refresh fails)
             }
         }
     };
-
+    
+    
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
             handleSend();
