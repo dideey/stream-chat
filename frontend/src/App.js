@@ -42,7 +42,7 @@ function App() {
         <button onClick={() => setRoute('/')}>Home</button>
         <button onClick={() => setRoute('/login')}>Login</button>
         <button onClick={() => setRoute('/register')}>Register</button>
-	  <button onClick={ () => setRoute('/setting')}>Settings</button>
+	<button onClick={() => setRoute('/setting')}>Settings</button>
       </nav>
       {renderPage()}
     </div>
