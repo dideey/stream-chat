@@ -1,33 +1,35 @@
-import React, { useState, useEffect, useContext } from "react";
-import { ChatContext } from "../context/ChatContext"
+import React, { useState, useEffect, useCallback, useContext } from "react";
+import { ChatContext } from "../context/ChatContext";
 
 const Search = () => {
   const [query, setQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const { setCurrentChat } = useContext(ChatContext);
 
-  // Example function to handle search logic
   const handleSearch = (e) => {
     setQuery(e.target.value);
   };
 
-  // Example function to simulate search results
-  const fetchSearchResults = async () => {
-    // Replace with your search API call or logic
-    const results = await fetch(`/api/search?query=${query}`).then(res => res.json());
-    setSearchResults(results);
-  };
-
-  useEffect(() => {
+  // Memoize fetchSearchResults to avoid recreating it on every render
+  const fetchSearchResults = useCallback(async () => {
     if (query) {
-      fetchSearchResults();
+      const results = await fetch(`/api/search?query=${query}`).then(res => res.json());
+      setSearchResults(results);
     } else {
       setSearchResults([]);
     }
-  }, [query]);
+  }, [query]); // Dependency is query, so it will update when query changes
+
+  useEffect(() => {
+    fetchSearchResults();
+  }, [fetchSearchResults]); // Dependency is fetchSearchResults, so it updates when fetchSearchResults changes
 
   const handleSelectChat = (user) => {
-    // Handle chat selection logic
-    console.log("User selected:", user);
+    if (setCurrentChat) {
+      setCurrentChat(user);
+    } else {
+      console.error('setCurrentChat function is not available');
+    }
   };
 
   return (
@@ -64,3 +66,4 @@ const Search = () => {
 };
 
 export default Search;
+

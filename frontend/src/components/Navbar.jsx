@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
-import { AuthContext } from "../context/AuthContext"
+import { AuthContext } from "../context/AuthContext";
 
 const Navbar = () => {
-  const { currentUser } = useContext(AuthContext) || {};
+  const { currentUser, logout } = useContext(AuthContext) || {};
 
   if (!currentUser) {
-    return <div>Loading...</div>; // or handle loading state
+    return <div>Loading...</div>;
   }
 
   return (
@@ -14,7 +14,7 @@ const Navbar = () => {
       <div className="user">
         <img src={currentUser.photoURL} alt="" />
         <span>{currentUser.displayName}</span>
-        <button onClick={() => { /* handle logout */ }}>Logout</button>
+        <button onClick={logout}>Logout</button>
       </div>
     </div>
   );

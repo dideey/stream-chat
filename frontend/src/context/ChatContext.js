@@ -14,6 +14,11 @@ const INITIAL_STATE = {
 const chatReducer = (state, action) => {
   switch (action.type) {
     case 'CHANGE_USER':
+      if (!state.currentUser) {
+        console.error('currentUser is not defined');
+        return state;
+      }
+
       return {
         user: action.payload,
         chatId: state.currentUser.uid > action.payload.uid
@@ -29,6 +34,7 @@ const chatReducer = (state, action) => {
 // ChatContextProvider component
 export const ChatContextProvider = ({ children }) => {
   const { currentUser } = useContext(AuthContext);
+  console.log('currentUser in ChatContextProvider:', currentUser);
 
   // Initialize state with currentUser information if available
   const [state, dispatch] = useReducer(chatReducer, {
@@ -36,9 +42,19 @@ export const ChatContextProvider = ({ children }) => {
     currentUser,
   });
 
-  // Provide context with state and dispatch
+  // Function to change the current chat user
+  const setCurrentChat = (user) => {
+    console.log('Setting current chat with user:', user);
+    if (dispatch) {
+      dispatch({ type: 'CHANGE_USER', payload: user });
+    } else {
+      console.error('dispatch function is not available');
+    }
+  };
+
+  // Provide context with state, dispatch, and the setCurrentChat function
   return (
-    <ChatContext.Provider value={{ data: state, dispatch }}>
+    <ChatContext.Provider value={{ data: state, setCurrentChat }}>
       {children}
     </ChatContext.Provider>
   );

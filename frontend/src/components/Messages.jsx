@@ -2,25 +2,24 @@ import React, { useContext, useState, useEffect } from "react";
 import { ChatContext } from "../context/ChatContext";
 import Message from "./Message";
 
-const mockMessages = [
-  { id: "1", text: "Hello!", senderId: "user1", date: new Date().toISOString() },
-  { id: "2", text: "How are you?", senderId: "user2", date: new Date().toISOString() },
-];
-
 const Messages = () => {
   const [messages, setMessages] = useState([]);
   const { data } = useContext(ChatContext);
+  const { chatId } = data;
 
   useEffect(() => {
-    // Simulate fetching messages
-    const fetchMessages = () => {
-      setMessages(mockMessages);
-    };
+    if (chatId) {
+      const fetchMessages = async () => {
+        // Fetch messages for the current chat
+        const fetchedMessages = await fetch(`/api/messages?chatId=${chatId}`).then(res => res.json());
+        setMessages(fetchedMessages);
+      };
 
-    fetchMessages();
-  }, [data.chatId]);
-
-  console.log(messages);
+      fetchMessages();
+    } else {
+      setMessages([]);
+    }
+  }, [chatId]);
 
   return (
     <div className="messages">

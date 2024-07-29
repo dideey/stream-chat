@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 
 // Create AuthContext
 export const AuthContext = createContext();
@@ -6,7 +6,7 @@ export const AuthContext = createContext();
 // Mock user data for simulation
 const mockUser = {
   uid: "12345",
-  displayName: "Rafeal Nadal",
+  displayName: "Rafael Nadal",
   photoURL: "https://via.placeholder.com/150",
 };
 
@@ -17,11 +17,9 @@ export const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     // Simulate authentication check
     const simulateAuthCheck = () => {
-      // Simulate a user being logged in after 1 second
       setTimeout(() => {
         setCurrentUser(mockUser);
         setLoading(false);
-        console.log(mockUser);
       }, 1000);
     };
 
@@ -33,9 +31,14 @@ export const AuthContextProvider = ({ children }) => {
     };
   }, []);
 
+  const logout = () => {
+    setCurrentUser(null);
+  };
+
   return (
-    <AuthContext.Provider value={{ currentUser, loading }}>
+    <AuthContext.Provider value={{ currentUser, loading, logout }}>
       {children}
     </AuthContext.Provider>
   );
 };
+
