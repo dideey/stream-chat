@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Settings from './pages/Settings';
 import { AuthContext } from './context/AuthContext';
 import './style.css';
 
@@ -41,6 +42,7 @@ function App() {
         <button onClick={() => setRoute('/')}>Home</button>
         <button onClick={() => setRoute('/login')}>Login</button>
         <button onClick={() => setRoute('/register')}>Register</button>
+	  <button onClick={ () => setRoute('/setting')}>Settings</button>
       </nav>
       {renderPage()}
     </div>
