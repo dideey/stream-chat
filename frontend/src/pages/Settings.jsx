@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { FaUserCircle, FaUpload } from 'react-icons/fa';
-import './settingspage.css';
 
 const Settings = () => {
     // Define state variables and setters
