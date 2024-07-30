@@ -7,6 +7,10 @@ const Settings = () => {
     const [theme, setTheme] = useState('light'); // Set default value
     const [language, setLanguage] = useState('en'); // Set default value
     const [profileImage, setProfileImage] = useState(null);
+    const [name, setName] = useState(''); // New state for name
+    const [email, setEmail] = useState(''); // New state for email
+    const [bio, setBio] = useState(''); // New state for bio
+    const [message, setMessage] = useState('');
 
     // Handler for image upload
     const handleImageUpload = (event) => {
@@ -17,9 +21,30 @@ const Settings = () => {
     };
 
     // Handler for saving settings
-    const handleSave = () => {
+    const handleSave = async () => {
         // Add your save logic here
         console.log('Settings saved');
+
+        try {
+            const response = await fetch('/api/profile', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name, email, bio }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                setMessage('Profile updated successfully');
+            } else {
+                setMessage(data.message || 'Failed to update profile');
+            }
+        } catch (error) {
+            console.error('Error updating profile:', error);
+            setMessage('Failed to update profile');
+        }
     };
 
     return (
@@ -29,8 +54,8 @@ const Settings = () => {
             <div className="container">
                 <div className="section">
                     <label className="label">Profile Picture</label>
-                    <div 
-                        className="profile-picture" 
+                    <div
+                        className="profile-picture"
                         style={{ backgroundImage: `url(${profileImage})` }}
                     >
                         {!profileImage && <FaUserCircle size={100} color="#ccc" />}
@@ -38,12 +63,38 @@ const Settings = () => {
                     <label className="upload-button" htmlFor="file-upload">
                         <FaUpload /> Upload Profile Picture
                     </label>
-                    <input 
-                        className="hidden-input" 
-                        id="file-upload" 
-                        type="file" 
-                        accept="image/*" 
-                        onChange={handleImageUpload} 
+                    <input
+                        className="hidden-input"
+                        id="file-upload"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                    />
+                </div>
+            </div>
+
+            <div className="container">
+                <div className="section">
+                    <label className="label">Name</label>
+                    <input
+                        type="text"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                    />
+                </div>
+                <div className="section">
+                    <label className="label">Email</label>
+                    <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                </div>
+                <div className="section">
+                    <label className="label">Bio</label>
+                    <textarea
+                        value={bio}
+                        onChange={(e) => setBio(e.target.value)}
                     />
                 </div>
             </div>
@@ -52,9 +103,9 @@ const Settings = () => {
                 <h2>Notification Preferences</h2>
                 <label>
                     Enable Notifications:
-                    <input 
-                        type="checkbox" 
-                        checked={notifications} 
+                    <input
+                        type="checkbox"
+                        checked={notifications}
                         onChange={() => setNotifications(prev => !prev)}
                     />
                 </label>
@@ -63,19 +114,19 @@ const Settings = () => {
             <section className="settings-section">
                 <h2>Theme</h2>
                 <label>
-                    <input 
-                        type="radio" 
-                        value="light" 
-                        checked={theme === 'light'} 
+                    <input
+                        type="radio"
+                        value="light"
+                        checked={theme === 'light'}
                         onChange={() => setTheme('light')}
                     />
                     Light
                 </label>
                 <label>
-                    <input 
-                        type="radio" 
-                        value="dark" 
-                        checked={theme === 'dark'} 
+                    <input
+                        type="radio"
+                        value="dark"
+                        checked={theme === 'dark'}
                         onChange={() => setTheme('dark')}
                     />
                     Dark
@@ -92,6 +143,7 @@ const Settings = () => {
             </section>
 
             <button className="save-button" onClick={handleSave}>Save Changes</button>
+            {message && <p>{message}</p>}
         </div>
     );
 };
