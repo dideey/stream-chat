@@ -27,8 +27,10 @@ const Chat = ({ userId, selectedChat }) => {
     // Enables WebSocket connection
     useEffect(() => {
         if (!selectedChat || selectedChat.id) return; // Do not set up socket if no selected chat
-
+        
+        console.log('We outsideeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
         const roomName = generateRoomName(userId, selectedChat.id);
+        console.log(roomName)
         const socket = new WebSocket(`ws://localhost:8000/ws/chat/${roomName}/`);
 
         socket.onmessage = (e) => {
@@ -106,8 +108,8 @@ const Chat = ({ userId, selectedChat }) => {
                 accessToken = await refreshAccessToken() || accessToken;
     
                 // Send message to the API
-                const response = await axios.post('http://195.35.37.100:8000/chat/send_message/', {
-                    receiver: selectedChat.username, // Adjust if needed
+                const response = await axios.post('http://195.35.37.100:8000/chat/send_message', {
+                    receiver: selectedChat.username,
                     content: text,
                 }, {
                     headers: {
@@ -119,7 +121,7 @@ const Chat = ({ userId, selectedChat }) => {
                 console.log('Message sent:', response.data);
             } catch (error) {
                 console.error("Error sending message:", error.response ? error.response.data : error.message);
-                // Handle errors (e.g., redirect to login if refresh fails)
+
             }
         }
     };
