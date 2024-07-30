@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { FaUserCircle, FaUpload } from 'react-icons/fa';
-import styles from './Settings.module.css';
 
 const Settings = () => {
     // Define state variables and setters
@@ -8,10 +7,6 @@ const Settings = () => {
     const [theme, setTheme] = useState('light'); // Set default value
     const [language, setLanguage] = useState('en'); // Set default value
     const [profileImage, setProfileImage] = useState(null);
-    const [name, setName] = useState(''); // New state for name
-    const [email, setEmail] = useState(''); // New state for email
-    const [bio, setBio] = useState(''); // New state for bio
-    const [message, setMessage] = useState('');
 
     // Handler for image upload
     const handleImageUpload = (event) => {
@@ -22,59 +17,38 @@ const Settings = () => {
     };
 
     // Handler for saving settings
-    const handleSave = async () => {
+    const handleSave = () => {
         // Add your save logic here
         console.log('Settings saved');
-
-        try {
-            const response = await fetch('/api/profile', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ name, email, bio }),
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                setMessage('Profile updated successfully');
-            } else {
-                setMessage(data.message || 'Failed to update profile');
-            }
-        } catch (error) {
-            console.error('Error updating profile:', error);
-            setMessage('Failed to update profile');
-        }
     };
 
     return (
-        <div className={styles.settings}>
+        <div className="settings">
             <h1>Settings</h1>
 
-            <div className={styles.container}>
-                <div className={styles.section}>
-                    <label className={styles.label}>Profile Picture</label>
-                    <div 
-                        className={styles.profilePicture} 
-                        style={{ backgroundImage: `url(${profileImage})` }}
+            <div className="container">
+                <div className="section">
+                    <label className="label">Profile Picture</label>
+                    <div
+                        className="profile-picture"
+                        style={{ backgroundImage: url(${profileImage}) }}
                     >
                         {!profileImage && <FaUserCircle size={100} color="#ccc" />}
                     </div>
-                    <label className={styles.uploadButton} htmlFor="file-upload">
+                    <label className="upload-button" htmlFor="file-upload">
                         <FaUpload /> Upload Profile Picture
                     </label>
-                    <input 
-                        className={styles.hiddenInput} 
-                        id="file-upload" 
-                        type="file" 
-                        accept="image/*" 
-                        onChange={handleImageUpload} 
+                    <input
+                        className="hidden-input"
+                        id="file-upload"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
                     />
                 </div>
             </div>
 
-            <section className={styles.settingsSection}>
+            <section className="settings-section">
                 <h2>Notification Preferences</h2>
                 <label>
                     Enable Notifications:
@@ -86,7 +60,7 @@ const Settings = () => {
                 </label>
             </section>
 
-            <section className={styles.settingsSection}>
+            <section className="settings-section">
                 <h2>Theme</h2>
                 <label>
                     <input
@@ -108,7 +82,7 @@ const Settings = () => {
                 </label>
             </section>
 
-            <section className={styles.settingsSection}>
+            <section className="settings-section">
                 <h2>Language</h2>
                 <select value={language} onChange={(e) => setLanguage(e.target.value)}>
                     <option value="en">English</option>
@@ -117,7 +91,7 @@ const Settings = () => {
                 </select>
             </section>
 
-            <button className={styles.saveButton} onClick={handleSave}>Save Changes</button>
+            <button className="save-button" onClick={handleSave}>Save Changes</button>
         </div>
     );
 };
