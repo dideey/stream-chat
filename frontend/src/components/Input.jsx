@@ -1,33 +1,13 @@
-import React, { useContext, useState } from "react";
+import React from "react";
 import Img from "../img/img.png";
 import Attach from "../img/attach.png";
-import { AuthContext } from "../context/AuthContext";
-//import { ChatContext } from "../context/ChatContext";
-import { v4 as uuid } from "uuid";
 
-const Input = () => {
-  const [text, setText] = useState("");
-  const [img, setImg] = useState(null);
-  const { currentUser } = useContext(AuthContext);
-  //const { data } = useContext(ChatContext);
-
-  const handleSend = async () => {
-    // Simulate sending message
-    const message = {
-      id: uuid(),
-      text,
-      senderId: currentUser.uid,
-      date: new Date().toISOString(),
-      img: img ? URL.createObjectURL(img) : null, // Use local URL for the image
-    };
-
-    // TODO: Handle the sending of the message to your backend or state management
-
-    console.log("Message sent:", message);
-
-    // Reset the input
-    setText("");
-    setImg(null);
+const Input = ({ message, setMessage, img, setImg, onSend }) => {
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      onSend();
+    }
   };
 
   return (
@@ -35,11 +15,12 @@ const Input = () => {
       <input
         type="text"
         placeholder="Type something..."
-        onChange={(e) => setText(e.target.value)}
-        value={text}
+        onChange={(e) => setMessage(e.target.value)}
+        value={message}
+        onKeyDown={handleKeyPress}
       />
       <div className="send">
-        <img src={Attach} alt="" />
+        <img src={Attach} alt="Attach file" />
         <input
           type="file"
           style={{ display: "none" }}
@@ -47,9 +28,9 @@ const Input = () => {
           onChange={(e) => setImg(e.target.files[0])}
         />
         <label htmlFor="file">
-          <img src={Img} alt="" />
+          <img src={Img} alt="Add image" />
         </label>
-        <button onClick={handleSend}>Send</button>
+        <button onClick={onSend}>Send</button>
       </div>
     </div>
   );

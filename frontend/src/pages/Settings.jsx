@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { FaUserCircle, FaUpload } from 'react-icons/fa';
+import styles from './Settings.module.css';
 
 const Settings = () => {
     // Define state variables and setters
@@ -48,58 +49,32 @@ const Settings = () => {
     };
 
     return (
-        <div className="settings">
+        <div className={styles.settings}>
             <h1>Settings</h1>
 
-            <div className="container">
-                <div className="section">
-                    <label className="label">Profile Picture</label>
-                    <div
-                        className="profile-picture"
+            <div className={styles.container}>
+                <div className={styles.section}>
+                    <label className={styles.label}>Profile Picture</label>
+                    <div 
+                        className={styles.profilePicture} 
                         style={{ backgroundImage: `url(${profileImage})` }}
                     >
                         {!profileImage && <FaUserCircle size={100} color="#ccc" />}
                     </div>
-                    <label className="upload-button" htmlFor="file-upload">
+                    <label className={styles.uploadButton} htmlFor="file-upload">
                         <FaUpload /> Upload Profile Picture
                     </label>
-                    <input
-                        className="hidden-input"
-                        id="file-upload"
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageUpload}
+                    <input 
+                        className={styles.hiddenInput} 
+                        id="file-upload" 
+                        type="file" 
+                        accept="image/*" 
+                        onChange={handleImageUpload} 
                     />
                 </div>
             </div>
 
-            <div className="container">
-                <div className="section">
-                    <label className="label">Name</label>
-                    <input
-                        type="text"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                    />
-                </div>
-                <div className="section">
-                    <label className="label">Email</label>
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                </div>
-                <div className="section">
-                    <label className="label">Bio</label>
-                    <textarea
-                        value={bio}
-                        onChange={(e) => setBio(e.target.value)}
-                    />
-                </div>
-            </div>
-
-            <section className="settings-section">
+            <section className={styles.settingsSection}>
                 <h2>Notification Preferences</h2>
                 <label>
                     Enable Notifications:
@@ -111,7 +86,7 @@ const Settings = () => {
                 </label>
             </section>
 
-            <section className="settings-section">
+            <section className={styles.settingsSection}>
                 <h2>Theme</h2>
                 <label>
                     <input
@@ -133,7 +108,7 @@ const Settings = () => {
                 </label>
             </section>
 
-            <section className="settings-section">
+            <section className={styles.settingsSection}>
                 <h2>Language</h2>
                 <select value={language} onChange={(e) => setLanguage(e.target.value)}>
                     <option value="en">English</option>
@@ -142,8 +117,7 @@ const Settings = () => {
                 </select>
             </section>
 
-            <button className="save-button" onClick={handleSave}>Save Changes</button>
-            {message && <p>{message}</p>}
+            <button className={styles.saveButton} onClick={handleSave}>Save Changes</button>
         </div>
     );
 };

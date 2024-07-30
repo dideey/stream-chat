@@ -5,16 +5,22 @@ import More from "../img/more.png";
 import Messages from "./Messages";
 import Input from "./Input";
 import { ChatContext } from "../context/ChatContext";
+import { AuthContext } from "../context/AuthContext";
 import DropdownMenu from "./DropdownMenu";
+import { v4 as uuid } from "uuid";
 
 const Chat = () => {
   const { data } = useContext(ChatContext);
+  const { currentUser } = useContext(AuthContext);
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [profileModalVisible, setProfileModalVisible] = useState(false);
   const [reportModalVisible, setReportModalVisible] = useState(false);
   const [addModalVisible, setAddModalVisible] = useState(false);
   const [cameraModalVisible, setCameraModalVisible] = useState(false);
   const [reportText, setReportText] = useState('');
+  const [messages, setMessages] = useState([]);
+  const [message, setMessage] = useState('');
+  const [img, setImg] = useState(null);
   const dropdownRef = useRef(null);
 
   const toggleDropdown = (e) => {
@@ -50,6 +56,7 @@ const Chat = () => {
 
   const handleClearChat = () => {
     console.log('Clear Chat clicked');
+    setMessages([]); // Clear chat messages
     setDropdownVisible(false);
   };
 
@@ -66,6 +73,22 @@ const Chat = () => {
   const handleCameraClick = () => {
     console.log('Camera icon clicked');
     setCameraModalVisible(true);
+  };
+
+  const handleSend = () => {
+    if (message.trim() || img) {
+      const newMessage = {
+        id: uuid(),
+        text: message,
+        senderId: currentUser.uid,
+        date: new Date().toLocaleString(), // Use local string for display
+        img: img ? URL.createObjectURL(img) : null,
+      };
+
+      setMessages([...messages, newMessage]);
+      setMessage('');
+      setImg(null);
+    }
   };
 
   return (
@@ -87,7 +110,7 @@ const Chat = () => {
           />
           <img
             src={More}
-            alt="More"
+            alt="More options"
             onClick={toggleDropdown}
             style={{ cursor: 'pointer' }}
           />
@@ -104,22 +127,28 @@ const Chat = () => {
           )}
         </div>
       </div>
-      <Messages />
-      <Input />
+      <div className="chat-messages">
+        {messages.map((msg) => (
+          <div key={msg.id} className="chat-message">
+            <span className="chat-sender">{msg.senderId === currentUser.uid ? "You" : data.user?.displayName}:</span>
+            <span className="chat-text">{msg.text}</span>
+            {msg.img && <img src={msg.img} alt="Attached" className="chat-image" />}
+            <span className="chat-time">{msg.date}</span>
+          </div>
+        ))}
+      </div>
+      <Input message={message} setMessage={setMessage} img={img} setImg={setImg} onSend={handleSend} />
 
-      {/* Profile Modal */}
       {profileModalVisible && (
         <div className="profile-modal">
           <div className="modal-content">
             <span className="close" onClick={() => setProfileModalVisible(false)}>&times;</span>
             <h2>{data.user?.displayName}</h2>
             <p>Email: {data.user?.email}</p>
-            {/* Add more user information here */}
           </div>
         </div>
       )}
 
-      {/* Report Modal */}
       {reportModalVisible && (
         <div className="report-modal">
           <div className="modal-content">
@@ -139,24 +168,20 @@ const Chat = () => {
         </div>
       )}
 
-      {/* Add Modal */}
       {addModalVisible && (
         <div className="add-modal">
           <div className="modal-content">
             <span className="close" onClick={() => setAddModalVisible(false)}>&times;</span>
             <h2>Add New Contact</h2>
-            {/* Add your form or content for adding a new contact here */}
           </div>
         </div>
       )}
 
-      {/* Camera Modal */}
       {cameraModalVisible && (
         <div className="camera-modal">
           <div className="modal-content">
             <span className="close" onClick={() => setCameraModalVisible(false)}>&times;</span>
             <h2>Camera</h2>
-            {/* Add your camera functionality or content here */}
           </div>
         </div>
       )}
@@ -165,3 +190,4 @@ const Chat = () => {
 };
 
 export default Chat;
+
