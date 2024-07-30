@@ -442,28 +442,17 @@
 
 .section {
   margin-bottom: 30px;
-  width: 80%; /* Adjusted for better responsiveness */
-  max-width: 500px; /* Max width for larger screens */
 }
 
 .label {
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
-  font-size: 16px;
 }
 
-.input, .select, .textarea {
-  width: 100%;
+.input, .select {
   padding: 10px;
   font-size: 16px;
-  margin-bottom: 10px; /* Added margin for spacing */
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.textarea {
-  resize: vertical;
 }
 
 .profile-picture {
@@ -487,7 +476,6 @@
   border-radius: 5px;
   cursor: pointer;
   margin-top: 10px;
-  text-align: center; /* Center align the text */
 }
 
 .upload-button:hover {
@@ -497,31 +485,5 @@
 .hidden-input {
   display: none;
 }
-
-.settings-section {
-  margin-bottom: 30px;
-  width: 80%; /* Adjusted for better responsiveness */
-  max-width: 500px; /* Max width for larger screens */
-}
-
-.save-button {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 20px;
-}
-
-.save-button:hover {
-  background-color: #0056b3;
-}
-
-p {
-  color: green; /* You can change this color based on your theme */
-  font-size: 16px;
-  text-align: center;
-}
-
 /*# sourceMappingURL=style.css.map */
+
